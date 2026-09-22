@@ -49,3 +49,21 @@ def test_unshrinkable_state_is_rejected():
     tiny = WebDecide(tok, model=None, meta={"max_state": 20, "max_branch": 400}, name="t")
     with pytest.raises(ContextTooLong):
         tiny.encode(SystemOneRequest(state="word " * 200, questions={"q": {"type": "noul", "instructions": "ok?"}}))
+
+
+class _UniformModel:
+    """Stand-in for DecisionModel: uniform probabilities over each question's options, no GPU needed."""
+
+    def probs(self, encs):
+        return [[[1 / len(o)] * len(o) for o in e["opt_idx"]] for e in encs]
+
+
+def test_predict_returns_the_system_one_shape(small):
+    m = WebDecide(small.tokenizer, _UniformModel(), small.meta, name="t")
+    out = m.predict({"page": {"url": "", "title": "t", "text": "hello"}},
+                    {"operation": {"type": "choice", "instructions": "next?", "criteria": {"CLICK": None, "DONE": None}},
+                     "ok": {"type": "noul", "instructions": "ok?"}})
+    assert set(out) == {"model", "answers", "usage", "latency_ms"}
+    assert out["answers"]["operation"]["choice"] in ("CLICK", "DONE")
+    assert set(out["answers"]["operation"]["probabilities"]) == {"CLICK", "DONE"}
+    assert out["answers"]["ok"]["noul"] == 0.5

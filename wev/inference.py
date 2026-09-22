@@ -94,6 +94,20 @@ class WebDecide:
                 if e.part != "state" or not _shrink_state(req.state):
                     raise
 
+    def predict(self, state, questions, model: str | None = None) -> dict:
+        """Same response shape as POST /v1/systemone."""
+        req = SystemOneRequest(state=state, questions=questions, model=model or self.name)
+        return self.predict_request(req)
+
+    def predict_request(self, req: SystemOneRequest) -> dict:
+        t = time.perf_counter()
+        enc, meta = self.encode(req)
+        probs = self.model.probs([enc])[0]
+        answers = to_answers(probs, meta)
+        return {"model": req.model, "answers": answers,
+                "usage": {"input_tokens": len(enc["ids"]), "output_tokens": output_tokens(self.tokenizer, answers)},
+                "latency_ms": round((time.perf_counter() - t) * 1000)}
+
 
 def _shrink_state(state) -> bool:
     """One shrinking step on a jev-ultrafast-shaped state; False when there is nothing left to shrink."""
@@ -117,20 +131,6 @@ def _shrink_state(state) -> bool:
         state["recent_actions"] = history[-3:]
         return True
     return False
-
-    def predict(self, state, questions, model: str | None = None) -> dict:
-        """Same response shape as POST /v1/systemone."""
-        req = SystemOneRequest(state=state, questions=questions, model=model or self.name)
-        return self.predict_request(req)
-
-    def predict_request(self, req: SystemOneRequest) -> dict:
-        t = time.perf_counter()
-        enc, meta = self.encode(req)
-        probs = self.model.probs([enc])[0]
-        answers = to_answers(probs, meta)
-        return {"model": req.model, "answers": answers,
-                "usage": {"input_tokens": len(enc["ids"]), "output_tokens": output_tokens(self.tokenizer, answers)},
-                "latency_ms": round((time.perf_counter() - t) * 1000)}
 
 
 def load(path_or_repo: str, device: str | None = None, dtype=None) -> WebDecide:
