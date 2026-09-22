@@ -1,0 +1,44 @@
+wev
+Copyright 2026 the wev authors
+
+This product includes software adapted from kev
+(https://github.com/jaredpalmer/kev), licensed under the Apache License 2.0:
+  - wev/model.py: sequence packing with reserved Qwen delimiter tokens,
+    unforgeable option boundaries, block-causal branch mask with per-branch
+    position restart, pointer readout head.
+  - wev/api.py: System One request/response shapes and rendering.
+
+wev/prompts.py contains instruction text copied from jev-ultrafast
+(https://github.com/browser-use/jev-ultrafast), used under the MIT License:
+
+  MIT License
+  Copyright (c) 2026 Browser Use
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+
+Training data is derived from Mind2Web (https://huggingface.co/datasets/osunlp/Mind2Web),
+licensed CC BY 4.0: Deng et al., "Mind2Web: Towards a Generalist Agent for the Web", NeurIPS 2023
+(arXiv:2306.06070). Converted requests are a modified form of the original data.
+
+Training data is also derived from NNetNav (https://huggingface.co/datasets/stanfordnlp/nnetnav-live),
+licensed Apache-2.0: Murty et al., "NNetNav: Unsupervised Learning of Browser Agents Through Environment
+Interaction in the Wild" (arXiv:2410.02907).
+
+wev is not affiliated with or endorsed by TypeSafe AI. "Jev" and "System One" are referenced only to describe
+API compatibility.

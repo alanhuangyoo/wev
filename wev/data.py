@@ -1,0 +1,66 @@
+"""Labelled rows {request, labels, _meta} -> encoded training/eval items.
+
+A row's request is exactly what a client sends to /v1/systemone; labels map question id -> gold key
+(choice), bool (noul) or level index (score). Rendering goes through api.to_record, the same path as serving.
+"""
+import json
+from pathlib import Path
+
+from pydantic import ValidationError
+
+from .api import SystemOneRequest, to_record
+from .model import ContextTooLong, encode
+
+
+def read_jsonl(path):
+    with open(path) as f:
+        for line in f:
+            if line.strip():
+                yield json.loads(line)
+
+
+def labelled_record(row: dict):
+    """-> (record with integer labels, question metadata). Questions without a label are dropped: branches are
+    isolated, so a question's prediction does not depend on which other questions are packed with it."""
+    req = SystemOneRequest.model_validate(row["request"])
+    rec, meta = to_record(req)
+    qs, ms = [], []
+    for q, m in zip(rec["questions"], meta):
+        if m["id"] not in row["labels"]:
+            continue
+        y = row["labels"][m["id"]]
+        if m["type"] == "choice":
+            idx = m["keys"].index(y)
+        elif m["type"] == "noul":
+            idx = int(bool(y))
+        else:
+            idx = int(y)
+        qs.append({**q, "label": idx})
+        ms.append(m)
+    return {"state": rec["state"], "questions": qs}, ms
+
+
+def load_items(tok, path, max_state, max_branch, max_tokens=None, limit=None):
+    """-> (items, dropped). Invalid requests and rows that do not fit the context are dropped, never truncated."""
+    items, dropped = [], 0
+    for row in read_jsonl(path):
+        try:
+            rec, meta = labelled_record(row)
+        except ValidationError:   # e.g. a dropdown with more than 255 options: the API itself rejects it
+            dropped += 1
+            continue
+        if not rec["questions"]:
+            dropped += 1
+            continue
+        try:
+            enc = encode(tok, rec, max_state, max_branch, strict=True)
+        except ContextTooLong:
+            dropped += 1
+            continue
+        if max_tokens and len(enc["ids"]) > max_tokens:
+            dropped += 1
+            continue
+        items.append({"enc": enc, "meta": meta, "_meta": row.get("_meta", {})})
+        if limit and len(items) >= limit:
+            break
+    return items, dropped

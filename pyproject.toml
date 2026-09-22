@@ -1,0 +1,32 @@
+[project]
+name = "wev-ai"
+version = "0.1.0"
+description = "Open, local System-One-style decision model for browser agents: typed, calibrated choices in one forward pass (Qwen + LoRA + pointer head)."
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+    "torch>=2.8",
+    "transformers>=4.56,<5",
+    "peft>=0.15",
+    "datasets>=3.0",
+    "lxml>=5",
+    "pydantic>=2",
+    "numpy",
+    "safetensors",
+    "huggingface_hub",
+]
+
+[project.scripts]
+wev = "wev.cli:main"
+
+[project.optional-dependencies]
+serve = ["fastapi", "uvicorn"]
+dev = ["pytest"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["wev*"]
