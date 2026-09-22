@@ -79,19 +79,44 @@ class WebDecide:
         self.max_branch = meta.get("max_branch", MAX_BRANCH)
 
     def encode(self, req: SystemOneRequest):
-        """Encode, shortening state.page.text by 25% per try when the state is too long for the context.
-        Raises ContextTooLong when a question itself does not fit or the state has no page text to shorten."""
+        """Encode; when the state is too long for the context, shrink it in this order and retry:
+          1. page.text, by 25% per try (until 200 characters are left)
+          2. page.url, to its first 300 characters (tracking parameters and inline data can run to thousands of tokens)
+          3. the dropdown option lists inside state.elements (select targets repeat them in the question itself)
+          4. recent_actions, down to the last 3
+        Raises ContextTooLong when a question itself does not fit or nothing is left to shrink."""
         req = copy.deepcopy(req)
-        for _ in range(12):
+        while True:
             rec, meta = to_record(req)
             try:
                 return encode(self.tokenizer, rec, self.max_state, self.max_branch, strict=True), meta
             except ContextTooLong as e:
-                page = req.state.get("page") if isinstance(req.state, dict) else None
-                if e.part != "state" or not isinstance(page, dict) or not page.get("text"):
+                if e.part != "state" or not _shrink_state(req.state):
                     raise
-                page["text"] = page["text"][: int(len(page["text"]) * 0.75)]
-        raise ContextTooLong("state", -1, self.max_state)
+
+
+def _shrink_state(state) -> bool:
+    """One shrinking step on a jev-ultrafast-shaped state; False when there is nothing left to shrink."""
+    if not isinstance(state, dict):
+        return False
+    page = state.get("page")
+    if isinstance(page, dict) and isinstance(page.get("text"), str) and len(page["text"]) > 200:
+        page["text"] = page["text"][: max(200, int(len(page["text"]) * 0.75))]
+        return True
+    if isinstance(page, dict) and isinstance(page.get("url"), str) and len(page["url"]) > 300:
+        page["url"] = page["url"][:300]
+        return True
+    elements = state.get("elements")
+    if isinstance(elements, list) and any(isinstance(e, dict) and e.get("options") for e in elements):
+        for e in elements:
+            if isinstance(e, dict):
+                e.pop("options", None)
+        return True
+    history = state.get("recent_actions")
+    if isinstance(history, list) and len(history) > 3:
+        state["recent_actions"] = history[-3:]
+        return True
+    return False
 
     def predict(self, state, questions, model: str | None = None) -> dict:
         """Same response shape as POST /v1/systemone."""
