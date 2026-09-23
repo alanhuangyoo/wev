@@ -1,0 +1,123 @@
+{
+  "run": "exports/wev-4b",
+  "split": "test",
+  "dropped": 0,
+  "n": 400,
+  "step_success": 0.3675,
+  "latency_ms_median": 132.0,
+  "latency_ms_p90": 179.6,
+  "operation_by_gold": {},
+  "operation_confusion": {},
+  "action": {
+    "n": 200,
+    "accuracy": 0.7,
+    "ece": 0.0936,
+    "mean_confidence": 0.7921,
+    "chance": 0.225
+  },
+  "all_questions": {
+    "n": 2000,
+    "accuracy": 0.796,
+    "ece": 0.0551,
+    "mean_confidence": 0.8509,
+    "chance": 0.3175
+  },
+  "needs_review": {
+    "n": 100,
+    "accuracy": 0.88,
+    "ece": 0.0522,
+    "mean_confidence": 0.8881,
+    "chance": 0.5
+  },
+  "outcome": {
+    "n": 100,
+    "accuracy": 0.73,
+    "ece": 0.1401,
+    "mean_confidence": 0.8264,
+    "chance": 0.25
+  },
+  "risk": {
+    "n": 100,
+    "accuracy": 0.8,
+    "ece": 0.0825,
+    "mean_confidence": 0.8329,
+    "chance": 0.25
+  },
+  "urgency": {
+    "n": 400,
+    "accuracy": 0.72,
+    "ece": 0.0919,
+    "mean_confidence": 0.8063,
+    "chance": 0.25
+  },
+  "category": {
+    "n": 100,
+    "accuracy": 0.95,
+    "ece": 0.0404,
+    "mean_confidence": 0.9613,
+    "chance": 0.2
+  },
+  "churn_risk": {
+    "n": 100,
+    "accuracy": 0.88,
+    "ece": 0.0612,
+    "mean_confidence": 0.9355,
+    "chance": 0.25
+  },
+  "needs_human": {
+    "n": 100,
+    "accuracy": 0.86,
+    "ece": 0.0545,
+    "mean_confidence": 0.8881,
+    "chance": 0.5
+  },
+  "discrepancy_severity": {
+    "n": 100,
+    "accuracy": 0.83,
+    "ece": 0.0832,
+    "mean_confidence": 0.8073,
+    "chance": 0.25
+  },
+  "disposition": {
+    "n": 200,
+    "accuracy": 0.755,
+    "ece": 0.0603,
+    "mean_confidence": 0.8152,
+    "chance": 0.25
+  },
+  "duplicate": {
+    "n": 100,
+    "accuracy": 0.89,
+    "ece": 0.0522,
+    "mean_confidence": 0.9354,
+    "chance": 0.5
+  },
+  "matches_order": {
+    "n": 100,
+    "accuracy": 0.93,
+    "ece": 0.0419,
+    "mean_confidence": 0.8973,
+    "chance": 0.5
+  },
+  "credential_compromise": {
+    "n": 100,
+    "accuracy": 0.76,
+    "ece": 0.1108,
+    "mean_confidence": 0.8664,
+    "chance": 0.5
+  },
+  "severity": {
+    "n": 100,
+    "accuracy": 0.79,
+    "ece": 0.0704,
+    "mean_confidence": 0.8421,
+    "chance": 0.2
+  },
+  "true_positive": {
+    "n": 100,
+    "accuracy": 0.83,
+    "ece": 0.1032,
+    "mean_confidence": 0.897,
+    "chance": 0.5
+  }
+}

@@ -62,7 +62,7 @@ One read of the locked test splits; every other model was run on the same reques
 
 | model | kev decision-v7 | kev transfer-v4 | typed-decisions |
 |---|---|---|---|
-| **wev-4b** | 80.6 | 73.8 | **79.4** |
+| **wev-4b** | 80.6 | 73.3 | **79.6** |
 | Kev-4B | **88.2** | **82.1** | 65.1 |
 | Kev-8B | 88.1 | 76.8 | 62.7 |
 | Laya (typed-decisions) | 65.7 | 62.8 | 76.8 |
@@ -77,7 +77,7 @@ operation and target element both right)
 
 | model | step success | operation |
 |---|---|---|
-| **wev-4b** | **75.9** | **91.2** |
+| **wev-4b** | **75.4** | **90.0** |
 | Kev-4B | 21.2 | 35.7 |
 | Kev-8B | 19.0 | 73.3 |
 | Laya (typed-decisions) | 0.7 | 13.1 |
@@ -85,12 +85,12 @@ operation and target element both right)
 
 873 requests; 11 exceed the context `wev-4b` is evaluated with and count as wrong for it.
 
-NNetNav test split (live-web steps, DONE judged by an LLM): step success 61.4, DONE recall
-84.5, premature DONE 10.0.
+NNetNav test split (live-web steps, DONE judged by an LLM): step success 61.0, DONE recall
+80.6, premature DONE 8.3.
 
 **End to end** (153 held-out tasks on live websites, run by [jev-ultrafast](https://github.com/browser-use/jev-ultrafast)
 with `wev-4b` as its System One; success = the agent says DONE and an LLM judge reading the final page agrees):
-30/153 (19.6%) tasks, vs 27/153 (17.6%) for the qwen3-max teacher behind the same agent.
+21/153 (13.7%) tasks, vs 27/153 (17.6%) for the qwen3-max teacher behind the same agent.
 Live sites differ from run to run; treat gaps of a few tasks as noise.
 
 ## Model

@@ -1,88 +1,88 @@
 {
-  "run": "exports/wev-4b",
+  "run": "exports/wev-4b-v3",
   "split": "test",
   "dropped": 13,
   "n": 862,
-  "step_success": 0.7633,
-  "latency_ms_median": 594.6,
-  "latency_ms_p90": 869.4,
+  "step_success": 0.7691,
+  "latency_ms_median": 301.0,
+  "latency_ms_p90": 431.2,
   "operation_by_gold": {
     "CLICK": {
       "n": 687,
-      "recall": 0.9476
+      "recall": 0.9563
     },
     "SELECT": {
       "n": 65,
-      "recall": 0.9077
+      "recall": 0.8769
     },
     "TYPE_TEXT": {
       "n": 110,
-      "recall": 0.6909
+      "recall": 0.7455
     }
   },
   "premature_done_rate": 0.0,
   "operation_confusion": {
     "SELECT": {
-      "SELECT": 59,
-      "CLICK": 6
+      "SELECT": 57,
+      "CLICK": 8
     },
     "CLICK": {
-      "CLICK": 651,
-      "TYPE_TEXT": 26,
-      "SELECT": 10
+      "CLICK": 657,
+      "TYPE_TEXT": 16,
+      "SELECT": 14
     },
     "TYPE_TEXT": {
-      "TYPE_TEXT": 76,
-      "CLICK": 34
+      "TYPE_TEXT": 82,
+      "CLICK": 28
     }
   },
   "operation": {
     "n": 862,
-    "accuracy": 0.9118,
-    "ece": 0.0224,
-    "mean_confidence": 0.9268,
+    "accuracy": 0.9234,
+    "ece": 0.0295,
+    "mean_confidence": 0.9245,
     "chance": 0.1815
   },
   "all_questions": {
     "n": 1718,
-    "accuracy": 0.8737,
-    "ece": 0.0288,
-    "mean_confidence": 0.8979,
+    "accuracy": 0.8801,
+    "ece": 0.0243,
+    "mean_confidence": 0.8908,
     "chance": 0.1693
   },
   "target": {
     "n": 856,
-    "accuracy": 0.8353,
-    "ece": 0.0379,
-    "mean_confidence": 0.8688,
+    "accuracy": 0.8364,
+    "ece": 0.0309,
+    "mean_confidence": 0.8568,
     "chance": 0.157
   },
   "select_target": {
     "n": 59,
-    "accuracy": 0.8136,
-    "ece": 0.085,
-    "mean_confidence": 0.8823,
+    "accuracy": 0.8475,
+    "ece": 0.0645,
+    "mean_confidence": 0.8709,
     "chance": 0.1369
   },
   "target_k>1": {
     "n": 780,
-    "accuracy": 0.8192,
-    "ece": 0.0415,
-    "mean_confidence": 0.856,
+    "accuracy": 0.8205,
+    "ece": 0.0339,
+    "mean_confidence": 0.8428,
     "chance": 0.0749
   },
   "click_target": {
     "n": 687,
     "accuracy": 0.8137,
-    "ece": 0.0433,
-    "mean_confidence": 0.8508,
+    "ece": 0.0378,
+    "mean_confidence": 0.8387,
     "chance": 0.0512
   },
   "type_text_target": {
     "n": 110,
-    "accuracy": 0.9818,
-    "ece": 0.0315,
-    "mean_confidence": 0.9736,
+    "accuracy": 0.9727,
+    "ece": 0.0192,
+    "mean_confidence": 0.9621,
     "chance": 0.8288
   }
 }

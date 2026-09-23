@@ -13,9 +13,9 @@
   "train_max_branch": 2048,
   "backbone_dtype": "bf16",
   "train_args": {
-    "data": "data/m2w-v2,data/nnetnav-v3-clean,data/teacher-v1:3,data/teacher-v2:3,data/general/kev-v7:2,data/general/typed-decisions-train:8,data/ext/tasksource-jev,data/ext/jev-distill,data/ext/td-synth",
+    "data": "data/m2w-v2,data/nnetnav-v3-clean,data/teacher-v1-x3,data/general/kev-v7-x2,data/general/typed-decisions-train-x8,data/ext/tasksource-jev,data/ext/jev-distill,data/ext/td-synth",
     "base": "Qwen/Qwen3-4B-Base",
-    "out": "runs/wev-4b-v3",
+    "out": "runs/wev-4b-v2",
     "epochs": 1,
     "lr": 0.0001,
     "head_lr": 0.0,

@@ -1,130 +1,130 @@
 {
-  "run": "exports/wev-4b",
+  "run": "exports/wev-4b-v3",
   "split": "test",
   "dropped": 0,
   "n": 1176,
-  "step_success": 0.773,
-  "latency_ms_median": 44.1,
-  "latency_ms_p90": 120.7,
+  "step_success": 0.7738,
+  "latency_ms_median": 24.1,
+  "latency_ms_p90": 66.9,
   "operation_by_gold": {},
   "operation_confusion": {},
   "intent": {
     "n": 116,
-    "accuracy": 0.6379,
-    "ece": 0.1158,
-    "mean_confidence": 0.7491,
+    "accuracy": 0.6121,
+    "ece": 0.1725,
+    "mean_confidence": 0.7846,
     "chance": 0.013
   },
   "all_questions": {
     "n": 1440,
-    "accuracy": 0.8063,
-    "ece": 0.0278,
-    "mean_confidence": 0.8286,
+    "accuracy": 0.8056,
+    "ece": 0.0317,
+    "mean_confidence": 0.833,
     "chance": 0.3004
   },
   "answer": {
     "n": 80,
     "accuracy": 0.825,
-    "ece": 0.0449,
-    "mean_confidence": 0.8352,
+    "ece": 0.0408,
+    "mean_confidence": 0.8316,
     "chance": 0.5
   },
   "topic": {
     "n": 116,
-    "accuracy": 0.8879,
-    "ece": 0.125,
-    "mean_confidence": 0.8542,
+    "accuracy": 0.8448,
+    "ece": 0.0635,
+    "mean_confidence": 0.8796,
     "chance": 0.2448
   },
   "is_sports": {
     "n": 47,
     "accuracy": 0.9787,
-    "ece": 0.0217,
-    "mean_confidence": 0.9747,
+    "ece": 0.029,
+    "mean_confidence": 0.9872,
     "chance": 0.5
   },
   "is_business": {
     "n": 43,
-    "accuracy": 0.6977,
-    "ece": 0.1492,
-    "mean_confidence": 0.8468,
+    "accuracy": 0.7674,
+    "ece": 0.1172,
+    "mean_confidence": 0.8846,
     "chance": 0.5
   },
   "is_scitech": {
     "n": 49,
     "accuracy": 0.8776,
-    "ece": 0.0676,
-    "mean_confidence": 0.9038,
+    "ece": 0.0938,
+    "mean_confidence": 0.9167,
     "chance": 0.5
   },
   "is_world": {
     "n": 45,
-    "accuracy": 0.9111,
-    "ece": 0.11,
-    "mean_confidence": 0.817,
+    "accuracy": 0.8667,
+    "ece": 0.0749,
+    "mean_confidence": 0.823,
     "chance": 0.5
   },
   "relation": {
     "n": 116,
-    "accuracy": 0.7672,
-    "ece": 0.068,
-    "mean_confidence": 0.8216,
+    "accuracy": 0.75,
+    "ece": 0.0525,
+    "mean_confidence": 0.7693,
     "chance": 0.3247
   },
   "sentiment": {
     "n": 80,
-    "accuracy": 0.5375,
-    "ece": 0.0736,
-    "mean_confidence": 0.565,
+    "accuracy": 0.5625,
+    "ece": 0.1827,
+    "mean_confidence": 0.5946,
     "chance": 0.2
   },
   "rating": {
     "n": 80,
     "accuracy": 0.65,
-    "ece": 0.0897,
-    "mean_confidence": 0.6791,
+    "ece": 0.0552,
+    "mean_confidence": 0.6939,
     "chance": 0.2
   },
   "recommend": {
     "n": 80,
     "accuracy": 0.8875,
-    "ece": 0.0403,
-    "mean_confidence": 0.9178,
+    "ece": 0.0435,
+    "mean_confidence": 0.9292,
     "chance": 0.5
   },
   "answer_type": {
     "n": 116,
-    "accuracy": 0.7845,
-    "ece": 0.0972,
-    "mean_confidence": 0.8593,
+    "accuracy": 0.819,
+    "ece": 0.1034,
+    "mean_confidence": 0.8482,
     "chance": 0.1642
   },
   "category": {
     "n": 116,
-    "accuracy": 0.9655,
-    "ece": 0.0329,
-    "mean_confidence": 0.9461,
+    "accuracy": 0.9569,
+    "ece": 0.0347,
+    "mean_confidence": 0.9452,
     "chance": 0.0709
   },
   "stars": {
     "n": 80,
-    "accuracy": 0.5875,
-    "ece": 0.1302,
-    "mean_confidence": 0.6201,
+    "accuracy": 0.5625,
+    "ece": 0.0567,
+    "mean_confidence": 0.6099,
     "chance": 0.2
   },
   "positive": {
     "n": 80,
     "accuracy": 0.95,
-    "ece": 0.051,
-    "mean_confidence": 0.9641,
+    "ece": 0.0445,
+    "mean_confidence": 0.961,
     "chance": 0.5
   },
   "decision": {
     "n": 196,
-    "accuracy": 0.9031,
-    "ece": 0.0328,
-    "mean_confidence": 0.8811,
+    "accuracy": 0.9286,
+    "ece": 0.0451,
+    "mean_confidence": 0.8836,
     "chance": 0.3963
   }
 }
