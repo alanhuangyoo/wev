@@ -1,16 +1,21 @@
 [project]
 name = "wev-ai"
 version = "0.1.0"
-description = "Open, local System-One-style decision model for browser agents: typed, calibrated choices in one forward pass (Qwen + LoRA + pointer head)."
+description = "Local System-One decision model: typed questions in, calibrated probabilities out, one forward pass. General decisions and browser-agent steps; drop-in POST /v1/systemone."
 readme = "README.md"
 license = "Apache-2.0"
 requires-python = ">=3.11,<3.14"
+keywords = ["decision-model", "system-one", "browser-agent", "llm", "lora", "qwen", "calibration"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+]
 dependencies = [
     "torch>=2.8",
     "transformers>=4.56,<5",
     "peft>=0.15",
-    "datasets>=3.0",
-    "lxml>=5",
     "pydantic>=2",
     "numpy",
     "safetensors",
@@ -22,7 +27,13 @@ wev = "wev.cli:main"
 
 [project.optional-dependencies]
 serve = ["fastapi", "uvicorn"]
-dev = ["pytest"]
+train = ["datasets>=3.0", "lxml>=5"]   # data converters (Mind2Web, NNetNav, general corpora)
+dev = ["pytest", "datasets>=3.0", "lxml>=5"]
+
+[project.urls]
+Homepage = "https://github.com/alanhuangyoo/wev"
+Models = "https://huggingface.co/alanhuangya"
+Issues = "https://github.com/alanhuangyoo/wev/issues"
 
 [build-system]
 requires = ["setuptools>=68"]
