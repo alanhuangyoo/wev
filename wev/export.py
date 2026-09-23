@@ -60,11 +60,12 @@ def main():
             r1 = ref.predict(row["request"]["state"], row["request"]["questions"])["answers"]
             r2 = exp.predict(row["request"]["state"], row["request"]["questions"])["answers"]
             for q in r1:
-                if "probabilities" in r1[q]:
-                    p1, p2 = r1[q]["probabilities"], r2[q]["probabilities"]
-                    worst = max(worst, max(abs(p1[k] - p2[k]) for k in p1))
-                    flips += r1[q]["choice"] != r2[q]["choice"]
-                    n += 1
+                # choice and score answers carry a distribution; noul carries one probability
+                p1 = r1[q].get("probabilities") or {"true": r1[q]["noul"], "false": 1 - r1[q]["noul"]}
+                p2 = r2[q].get("probabilities") or {"true": r2[q]["noul"], "false": 1 - r2[q]["noul"]}
+                worst = max(worst, max(abs(p1[k] - p2[k]) for k in p1))
+                flips += max(p1, key=p1.get) != max(p2, key=p2.get)
+                n += 1
         print(f"check: {n} questions, max |dp| {worst:.4f}, argmax flips {flips}", flush=True)
 
 

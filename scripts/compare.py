@@ -43,6 +43,21 @@ def laya_backend(spec):
     return ask
 
 
+def predicted(ans, kind):
+    """The answer's top option, scored like wev.evaluate: argmax over the options of the question."""
+    if kind == "noul":
+        return None if ans.get("noul") is None else ans["noul"] >= 0.5
+    if kind == "score":
+        if ans.get("probabilities"):
+            return int(max(ans["probabilities"], key=ans["probabilities"].get))
+        return None if ans.get("score") is None else round(ans["score"])
+    return ans.get("choice")
+
+
+def normalise(gold, kind):
+    return bool(gold) if kind == "noul" else int(gold) if kind == "score" else gold
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--backend", required=True)
@@ -68,13 +83,17 @@ def main():
             failures[f"request:{type(e).__name__}"] += 1
         latency.append((time.perf_counter() - t) * 1000)
         ok = True
+        browser = "operation" in row["labels"]
         for qid, gold in row["labels"].items():
-            got = (answers.get(qid) or {}).get("choice")
+            q = row["request"]["questions"][qid]
+            got = predicted(answers.get(qid) or {}, q.get("type", "choice"))
             if got is None:
                 failures[f"missing:{qid.split('_')[0]}"] += 1
-            right = got == gold
-            k = len(row["request"]["questions"][qid]["criteria"])
-            keys = ["operation"] if qid == "operation" else ["target", qid] + (["target_k>1"] if k > 1 else [])
+            right = got is not None and got == normalise(gold, q.get("type", "choice"))
+            keys = ["all_questions"]
+            if browser:
+                k = len(q["criteria"])
+                keys += ["operation"] if qid == "operation" else ["target", qid] + (["target_k>1"] if k > 1 else [])
             for key in keys:
                 hits[key].append(right)
             ok &= right
@@ -82,7 +101,7 @@ def main():
         if (i + 1) % 100 == 0:
             print(f"{a.name}: {i + 1}/{len(rows)} step_success so far {sum(steps) / len(steps):.3f}", file=sys.stderr)
 
-    ops = [r["labels"]["operation"] for r in rows]
+    ops = [r["labels"]["operation"] for r in rows if "operation" in r["labels"]] or ["-"]
     majority = max(set(ops), key=ops.count)
     result = {"name": a.name, "backend": a.backend, "n": len(rows),
               "step_success": round(sum(steps) / len(steps), 4),
