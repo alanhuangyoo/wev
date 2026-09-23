@@ -10,6 +10,7 @@ import glob
 import json
 import os
 import shutil
+import signal
 import socket
 import subprocess
 import tempfile
@@ -28,6 +29,19 @@ def free_port():
     with socket.socket() as s:
         s.bind(("127.0.0.1", 0))
         return s.getsockname()[1]
+
+
+def kill_by_env(key, value):
+    """Kill processes started with key=value in their environment: trace_run.py leaves a browser_harness daemon
+    running after every episode, and thousands of them starve the machine."""
+    tag = f"{key}={value}".encode()
+    for d in Path("/proc").iterdir():
+        if d.name.isdigit():
+            try:
+                if tag in (d / "environ").read_bytes().split(b"\0"):
+                    os.kill(int(d.name), signal.SIGKILL)
+            except OSError:
+                pass
 
 
 def run_episode(task, worker, a, out):
@@ -60,6 +74,7 @@ def run_episode(task, worker, a, out):
     except subprocess.TimeoutExpired:
         outcome, final_url = "timeout", ""
     finally:
+        kill_by_env("BU_NAME", f"w{worker}-{ep}")
         chrome.kill()
         shutil.rmtree(profile, ignore_errors=True)
     rec = {"episode": ep, "task": task["id"], "source": task["source"], "goal": task["goal"], "outcome": outcome,
