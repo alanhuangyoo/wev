@@ -1,0 +1,60 @@
+{
+  "run": "/shared/node44/xiaohuang_stage/exports/wev-1.7b",
+  "split": "test",
+  "dropped": 0,
+  "n": 764,
+  "step_success": 0.6545,
+  "latency_ms_median": 29.3,
+  "latency_ms_p90": 68.0,
+  "operation_by_gold": {},
+  "operation_confusion": {},
+  "answer": {
+    "n": 232,
+    "accuracy": 0.5733,
+    "ece": 0.2188,
+    "mean_confidence": 0.7909,
+    "chance": 0.2448
+  },
+  "all_questions": {
+    "n": 764,
+    "accuracy": 0.6545,
+    "ece": 0.0993,
+    "mean_confidence": 0.7538,
+    "chance": 0.3628
+  },
+  "emotion": {
+    "n": 116,
+    "accuracy": 0.6207,
+    "ece": 0.0571,
+    "mean_confidence": 0.6185,
+    "chance": 0.1642
+  },
+  "offensive": {
+    "n": 80,
+    "accuracy": 0.7875,
+    "ece": 0.071,
+    "mean_confidence": 0.8375,
+    "chance": 0.5
+  },
+  "answers": {
+    "n": 80,
+    "accuracy": 0.8,
+    "ece": 0.1392,
+    "mean_confidence": 0.689,
+    "chance": 0.5
+  },
+  "paraphrase": {
+    "n": 80,
+    "accuracy": 0.825,
+    "ece": 0.0833,
+    "mean_confidence": 0.8222,
+    "chance": 0.5
+  },
+  "decision": {
+    "n": 176,
+    "accuracy": 0.5795,
+    "ece": 0.1811,
+    "mean_confidence": 0.7543,
+    "chance": 0.4621
+  }
+}

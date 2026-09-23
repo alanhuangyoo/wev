@@ -27,7 +27,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--data", required=True,
                     help="comma-separated directories with train.jsonl and dev.jsonl; training mixes all train files, "
-                         "each dev file is scored separately")
+                         "each dev file is scored separately. dir:K repeats that directory's train file K times")
     ap.add_argument("--base", default="Qwen/Qwen3-0.6B-Base")
     ap.add_argument("--out", required=True)
     ap.add_argument("--epochs", type=int, default=2)
@@ -76,12 +76,14 @@ def main():
 
     tok = AutoTokenizer.from_pretrained(a.base)
     train, dropped, devs = [], 0, {}
-    for d in [Path(x) for x in a.data.split(",")]:
+    for spec in a.data.split(","):
+        path, _, weight = spec.partition(":")
+        d, weight = Path(path), int(weight or 1)
         items, n_drop = load_items(tok, d / "train.jsonl", a.max_state, a.max_branch, a.max_tokens, a.limit or None)
-        train += items
+        train += items * weight
         dropped += n_drop
         devs[d.name], _ = load_items(tok, d / "dev.jsonl", a.max_state, a.max_branch, a.max_tokens, a.eval_n)
-        log(f"{d.name}: train {len(items)} (dropped {n_drop}), dev {len(devs[d.name])}", flush=True)
+        log(f"{d.name}: train {len(items)} x{weight} (dropped {n_drop}), dev {len(devs[d.name])}", flush=True)
     if a.subsample and a.subsample < len(train):
         train = random.Random(a.seed).sample(train, a.subsample)
     lengths = sorted(len(it["enc"]["ids"]) for it in train)

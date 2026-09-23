@@ -1,6 +1,6 @@
 ---
 license: apache-2.0
-base_model: Qwen/Qwen3-4B-Base
+base_model: Qwen/Qwen3-1.7B-Base
 language:
 - en
 tags:
@@ -17,9 +17,9 @@ datasets:
 - n4ze3m/typed-decisions-synth
 ---
 
-# wev-4b
+# wev-1.7b
 
-**A local decision model: typed questions in, calibrated probabilities out, in one forward pass.** `wev-4b` answers
+**A local decision model: typed questions in, calibrated probabilities out, in one forward pass.** `wev-1.7b` answers
 the `POST /v1/systemone` request shape (choice, yes/no and score questions over a free-form state), for general
 decisions and for browser-agent steps (*which operation? which element?*). It runs on your own GPU: no API key,
 no per-call cost, nothing generated.
@@ -35,7 +35,7 @@ pip install "wev-ai[serve]"
 
 ```python
 import wev
-m = wev.load("alanhuangya/wev-4b")
+m = wev.load("alanhuangya/wev-1.7b")
 out = m.predict(
     state="Refund request: order #4411 arrived damaged, customer attached photos, first refund this year.",
     questions={
@@ -50,7 +50,7 @@ print(out["answers"])
 ```
 
 ```bash
-wev serve --model alanhuangya/wev-4b --port 8009   # drop-in POST /v1/systemone, e.g. for jev-ultrafast
+wev serve --model alanhuangya/wev-1.7b --port 8009   # drop-in POST /v1/systemone, e.g. for jev-ultrafast
 ```
 
 ## Results
@@ -62,14 +62,14 @@ One read of the locked test splits; every other model was run on the same reques
 
 | model | kev decision-v7 | kev transfer-v4 | typed-decisions |
 |---|---|---|---|
-| **wev-4b** | 80.6 | 73.3 | **79.6** |
+| **wev-1.7b** | 81.1 | 65.5 | **79.5** |
 | Kev-4B | **88.2** | **82.1** | 65.1 |
 | Kev-8B | 88.1 | 76.8 | 62.7 |
 | Laya (typed-decisions) | 65.7 | 62.8 | 76.8 |
 | Laya | 64.3 | 63.7 | 36.2 |
 
-`wev-4b` trains on 80% of the typed-decisions train split, like the Laya (typed-decisions) specialist; Kev and Laya
-do not, so on that column they are generalists. kev decision-v7 is Kev's own training suite (`wev-4b` also trains on
+`wev-1.7b` trains on 80% of the typed-decisions train split, like the Laya (typed-decisions) specialist; Kev and Laya
+do not, so on that column they are generalists. kev decision-v7 is Kev's own training suite (`wev-1.7b` also trains on
 its train split); transfer-v4 is out-of-domain for every model here.
 
 **Browser steps** (Mind2Web test split: websites unseen in training, jev-ultrafast request format; step success =
@@ -77,26 +77,21 @@ operation and target element both right)
 
 | model | step success | operation |
 |---|---|---|
-| **wev-4b** | **75.4** | **90.0** |
+| **wev-1.7b** | **68.2** | **88.1** |
 | Kev-4B | 21.2 | 35.7 |
 | Kev-8B | — | — |
 | Laya (typed-decisions) | 0.7 | 13.1 |
 | Laya | 0.0 | 2.5 |
 
-873 requests; 11 exceed the context `wev-4b` is evaluated with and count as wrong for it.
+873 requests; 11 exceed the context `wev-1.7b` is evaluated with and count as wrong for it.
 
 NNetNav test split (live-web steps, DONE judged by an LLM): step success 61.0, DONE recall
-80.6, premature DONE 8.3.
-
-**End to end** (153 held-out tasks on live websites, run by [jev-ultrafast](https://github.com/browser-use/jev-ultrafast)
-with `wev-4b` as its System One; success = the agent says DONE and an LLM judge reading the final page agrees):
-21/153 (13.7%) tasks, vs 27/153 (17.6%) for the qwen3-max teacher behind the same agent.
-Live sites differ from run to run; treat gaps of a few tasks as noise.
+80.4, premature DONE 9.4.
 
 ## Model
 
-- Backbone: `Qwen/Qwen3-4B-Base` without its vocabulary head, LoRA r=16 on every attention and MLP projection, merged
-  into the weights of this export; 36 layers, bf16.
+- Backbone: `Qwen/Qwen3-1.7B-Base` without its vocabulary head, LoRA r=16 on every attention and MLP projection, merged
+  into the weights of this export; 28 layers, bf16.
 - Readout: a pointer head scores each option's `</opt>` state against the question's `<decide>` state.
 - Each question sees the state and itself only (block-causal branches, positions restart after the state), so a
   request with many questions costs one pass and answers never depend on question order.

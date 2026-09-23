@@ -97,7 +97,7 @@ with TypeSafe AI.
 ## Quickstart
 
 ```bash
-pip install "wev-ai[serve] @ git+{a.github}"
+pip install "wev-ai[serve]"
 ```
 
 ```python
@@ -148,6 +148,7 @@ NNetNav test split (live-web steps, DONE judged by an LLM): step success {pct(ac
 **End to end** (153 held-out tasks on live websites, run by [jev-ultrafast](https://github.com/browser-use/jev-ultrafast)
 with `{name}` as its System One; success = the agent says DONE and an LLM judge reading the final page agrees):
 {a.e2e} tasks{f', vs {a.teacher_e2e} for the qwen3-max teacher behind the same agent' if a.teacher_e2e else ''}.
+Live sites differ from run to run; treat gaps of a few tasks as noise.
 """
     card += f"""
 ## Model
@@ -162,8 +163,8 @@ with `{name}` as its System One; success = the agent says DONE and an LLM judge 
 
 ## Training
 
-{targs['epochs']} epoch, lr {targs['lr']}, one-cycle schedule, soft-label cross-entropy where the source has soft labels,
-data-parallel over 8 GPUs.
+{targs['epochs']} epoch, lr {targs['lr']}, one-cycle schedule, soft-label cross-entropy where the source has soft labels.
+Recipe and data builders: [{a.github.split('github.com/')[1]}]({a.github}).
 
 | source | license | what it adds |
 |---|---|---|

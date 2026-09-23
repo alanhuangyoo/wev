@@ -1,0 +1,108 @@
+{
+  "run": "/shared/node44/xiaohuang_stage/exports/wev-1.7b",
+  "split": "test",
+  "dropped": 0,
+  "n": 1150,
+  "step_success": 0.6104,
+  "latency_ms_median": 194.6,
+  "latency_ms_p90": 291.0,
+  "operation_by_gold": {
+    "BLOCKED": {
+      "n": 29,
+      "recall": 0.0345
+    },
+    "CLICK": {
+      "n": 478,
+      "recall": 0.818
+    },
+    "DONE": {
+      "n": 382,
+      "recall": 0.8037
+    },
+    "SCROLL_DOWN": {
+      "n": 52,
+      "recall": 0.0
+    },
+    "SCROLL_UP": {
+      "n": 8,
+      "recall": 0.0
+    },
+    "TYPE_TEXT": {
+      "n": 201,
+      "recall": 0.791
+    }
+  },
+  "premature_done_rate": 0.0938,
+  "operation_confusion": {
+    "CLICK": {
+      "CLICK": 391,
+      "DONE": 52,
+      "TYPE_TEXT": 35
+    },
+    "DONE": {
+      "DONE": 307,
+      "CLICK": 67,
+      "TYPE_TEXT": 8
+    },
+    "TYPE_TEXT": {
+      "TYPE_TEXT": 159,
+      "CLICK": 41,
+      "DONE": 1
+    },
+    "SCROLL_DOWN": {
+      "CLICK": 41,
+      "DONE": 11
+    },
+    "BLOCKED": {
+      "DONE": 8,
+      "CLICK": 18,
+      "BLOCKED": 1,
+      "TYPE_TEXT": 2
+    },
+    "SCROLL_UP": {
+      "CLICK": 8
+    }
+  },
+  "operation": {
+    "n": 1150,
+    "accuracy": 0.7461,
+    "ece": 0.0478,
+    "mean_confidence": 0.7903,
+    "chance": 0.1776
+  },
+  "all_questions": {
+    "n": 1829,
+    "accuracy": 0.7294,
+    "ece": 0.0542,
+    "mean_confidence": 0.772,
+    "chance": 0.2313
+  },
+  "target": {
+    "n": 679,
+    "accuracy": 0.701,
+    "ece": 0.0651,
+    "mean_confidence": 0.741,
+    "chance": 0.3223
+  },
+  "click_target": {
+    "n": 478,
+    "accuracy": 0.5837,
+    "ece": 0.0908,
+    "mean_confidence": 0.6388,
+    "chance": 0.0717
+  },
+  "target_k>1": {
+    "n": 504,
+    "accuracy": 0.5972,
+    "ece": 0.0877,
+    "mean_confidence": 0.651,
+    "chance": 0.087
+  },
+  "type_text_target": {
+    "n": 201,
+    "accuracy": 0.9801,
+    "ece": 0.0253,
+    "mean_confidence": 0.9839,
+    "chance": 0.9183
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "run": "/shared/node44/xiaohuang_stage/exports/wev-1.7b",
+  "split": "test",
+  "dropped": 13,
+  "n": 862,
+  "step_success": 0.6903,
+  "latency_ms_median": 272.8,
+  "latency_ms_p90": 392.0,
+  "operation_by_gold": {
+    "CLICK": {
+      "n": 687,
+      "recall": 0.9578
+    },
+    "SELECT": {
+      "n": 65,
+      "recall": 0.6462
+    },
+    "TYPE_TEXT": {
+      "n": 110,
+      "recall": 0.6273
+    }
+  },
+  "premature_done_rate": 0.0,
+  "operation_confusion": {
+    "SELECT": {
+      "CLICK": 23,
+      "SELECT": 42
+    },
+    "CLICK": {
+      "CLICK": 658,
+      "TYPE_TEXT": 27,
+      "SELECT": 2
+    },
+    "TYPE_TEXT": {
+      "TYPE_TEXT": 69,
+      "CLICK": 41
+    }
+  },
+  "operation": {
+    "n": 862,
+    "accuracy": 0.8921,
+    "ece": 0.0166,
+    "mean_confidence": 0.8947,
+    "chance": 0.1815
+  },
+  "all_questions": {
+    "n": 1718,
+    "accuracy": 0.8306,
+    "ece": 0.0309,
+    "mean_confidence": 0.8577,
+    "chance": 0.1693
+  },
+  "target": {
+    "n": 856,
+    "accuracy": 0.7687,
+    "ece": 0.0581,
+    "mean_confidence": 0.8204,
+    "chance": 0.157
+  },
+  "select_target": {
+    "n": 59,
+    "accuracy": 0.7458,
+    "ece": 0.1333,
+    "mean_confidence": 0.8488,
+    "chance": 0.1369
+  },
+  "target_k>1": {
+    "n": 780,
+    "accuracy": 0.7462,
+    "ece": 0.0637,
+    "mean_confidence": 0.8029,
+    "chance": 0.0749
+  },
+  "click_target": {
+    "n": 687,
+    "accuracy": 0.7409,
+    "ece": 0.0647,
+    "mean_confidence": 0.7954,
+    "chance": 0.0512
+  },
+  "type_text_target": {
+    "n": 110,
+    "accuracy": 0.9545,
+    "ece": 0.0359,
+    "mean_confidence": 0.9618,
+    "chance": 0.8288
+  }
+}

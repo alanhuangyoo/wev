@@ -1,0 +1,123 @@
+{
+  "run": "/shared/node44/xiaohuang_stage/exports/wev-1.7b",
+  "split": "test",
+  "dropped": 0,
+  "n": 400,
+  "step_success": 0.3675,
+  "latency_ms_median": 77.3,
+  "latency_ms_p90": 118.4,
+  "operation_by_gold": {},
+  "operation_confusion": {},
+  "action": {
+    "n": 200,
+    "accuracy": 0.67,
+    "ece": 0.162,
+    "mean_confidence": 0.8259,
+    "chance": 0.225
+  },
+  "all_questions": {
+    "n": 2000,
+    "accuracy": 0.7945,
+    "ece": 0.0779,
+    "mean_confidence": 0.8717,
+    "chance": 0.3175
+  },
+  "needs_review": {
+    "n": 100,
+    "accuracy": 0.9,
+    "ece": 0.0372,
+    "mean_confidence": 0.8926,
+    "chance": 0.5
+  },
+  "outcome": {
+    "n": 100,
+    "accuracy": 0.71,
+    "ece": 0.1043,
+    "mean_confidence": 0.8143,
+    "chance": 0.25
+  },
+  "risk": {
+    "n": 100,
+    "accuracy": 0.82,
+    "ece": 0.0981,
+    "mean_confidence": 0.8349,
+    "chance": 0.25
+  },
+  "urgency": {
+    "n": 400,
+    "accuracy": 0.71,
+    "ece": 0.1347,
+    "mean_confidence": 0.8447,
+    "chance": 0.25
+  },
+  "category": {
+    "n": 100,
+    "accuracy": 0.93,
+    "ece": 0.0568,
+    "mean_confidence": 0.9693,
+    "chance": 0.2
+  },
+  "churn_risk": {
+    "n": 100,
+    "accuracy": 0.9,
+    "ece": 0.0592,
+    "mean_confidence": 0.9393,
+    "chance": 0.25
+  },
+  "needs_human": {
+    "n": 100,
+    "accuracy": 0.79,
+    "ece": 0.126,
+    "mean_confidence": 0.916,
+    "chance": 0.5
+  },
+  "discrepancy_severity": {
+    "n": 100,
+    "accuracy": 0.85,
+    "ece": 0.0625,
+    "mean_confidence": 0.8169,
+    "chance": 0.25
+  },
+  "disposition": {
+    "n": 200,
+    "accuracy": 0.74,
+    "ece": 0.1007,
+    "mean_confidence": 0.8366,
+    "chance": 0.25
+  },
+  "duplicate": {
+    "n": 100,
+    "accuracy": 0.95,
+    "ece": 0.0398,
+    "mean_confidence": 0.9467,
+    "chance": 0.5
+  },
+  "matches_order": {
+    "n": 100,
+    "accuracy": 0.96,
+    "ece": 0.0352,
+    "mean_confidence": 0.9401,
+    "chance": 0.5
+  },
+  "credential_compromise": {
+    "n": 100,
+    "accuracy": 0.82,
+    "ece": 0.0943,
+    "mean_confidence": 0.8849,
+    "chance": 0.5
+  },
+  "severity": {
+    "n": 100,
+    "accuracy": 0.77,
+    "ece": 0.0796,
+    "mean_confidence": 0.8496,
+    "chance": 0.2
+  },
+  "true_positive": {
+    "n": 100,
+    "accuracy": 0.83,
+    "ece": 0.1066,
+    "mean_confidence": 0.9265,
+    "chance": 0.5
+  }
+}

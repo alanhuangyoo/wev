@@ -30,7 +30,7 @@ with TypeSafe AI.
 ## Quickstart
 
 ```bash
-pip install "wev-ai[serve] @ git+https://github.com/alanhuangyoo/wev"
+pip install "wev-ai[serve]"
 ```
 
 ```python
@@ -88,6 +88,11 @@ operation and target element both right)
 NNetNav test split (live-web steps, DONE judged by an LLM): step success 60.8, DONE recall
 79.6, premature DONE 8.2.
 
+**End to end** (153 held-out tasks on live websites, run by [jev-ultrafast](https://github.com/browser-use/jev-ultrafast)
+with `wev-8b` as its System One; success = the agent says DONE and an LLM judge reading the final page agrees):
+28/153 (18.3%) tasks, vs 27/153 (17.6%) for the qwen3-max teacher behind the same agent.
+Live sites differ from run to run; treat gaps of a few tasks as noise.
+
 ## Model
 
 - Backbone: `Qwen/Qwen3-8B-Base` without its vocabulary head, LoRA r=16 on every attention and MLP projection, merged
@@ -100,8 +105,8 @@ NNetNav test split (live-web steps, DONE judged by an LLM): step success 60.8, D
 
 ## Training
 
-1 epoch, lr 0.0001, one-cycle schedule, soft-label cross-entropy where the source has soft labels,
-data-parallel over 8 GPUs.
+1 epoch, lr 0.0001, one-cycle schedule, soft-label cross-entropy where the source has soft labels.
+Recipe and data builders: [alanhuangyoo/wev](https://github.com/alanhuangyoo/wev).
 
 | source | license | what it adds |
 |---|---|---|
