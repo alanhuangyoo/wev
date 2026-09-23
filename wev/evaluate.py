@@ -48,7 +48,7 @@ def evaluate_items(model, items) -> dict:
         ok = True
         for p, m, y in zip(probs, it["meta"], it["enc"]["labels"]):
             pred = max(range(len(p)), key=p.__getitem__)
-            kinds = [kind_of(m["id"])]
+            kinds = [kind_of(m["id"]), "all_questions"]   # all_questions: the per-decision accuracy others report
             if kinds[0] == "target":   # per operation, and without trivial single-candidate questions
                 kinds.append(m["id"])
                 if len(p) > 1:
