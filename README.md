@@ -86,6 +86,7 @@ in jev-ultrafast's request format. A step succeeds when both the operation and t
 | **wev-4b** | 75.4 | 90.0 |
 | **wev-1.7b** | 68.2 | 88.1 |
 | Kev-4B | 21.2 | 35.7 |
+| Kev-8B | 19.0 | 73.3 |
 | Laya (typed-decisions) | 0.7 | 13.1 |
 | Laya | 0.0 | 2.5 |
 
