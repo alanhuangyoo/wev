@@ -105,6 +105,17 @@ as a success when the agent says DONE and an LLM judge, reading the final page, 
 Live sites differ from run to run, so treat gaps of a few tasks as noise. Google Flights often answers automated
 browsing with a CAPTCHA, and every model fails most of those tasks.
 
+**Speed.** These are median in-process latencies on one RTX 5090 in bf16, with a warm model, one request at a time.
+Every question in a request is answered in the same pass.
+
+| model | kev decision-v7 (~180 tokens, 1 question) | typed-decisions (~380 tokens, 5 questions) | browser step (~3,200 tokens, 2 questions) |
+|---|---|---|---|
+| wev-1.7b | 10 ms | 13 ms | 91 ms |
+| wev-4b | 15 ms | 25 ms | 217 ms |
+| wev-8b | 21 ms | 37 ms | 322 ms |
+
+Reproduce with `scripts/bench_latency.py --model <export> --data <jsonl>...`.
+
 ## How it works
 
 ```
