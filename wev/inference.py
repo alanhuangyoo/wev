@@ -49,9 +49,11 @@ def default_dtype(device: str):
 
 
 def _resolve(path_or_repo: str) -> Path:
-    p = Path(path_or_repo)
+    p = Path(path_or_repo).expanduser()
     if p.is_dir():
         return p
+    if path_or_repo.startswith(("/", ".", "~")) or p.exists():
+        raise FileNotFoundError(f"{path_or_repo}: no such model directory")
     from huggingface_hub import snapshot_download
     return Path(snapshot_download(path_or_repo, allow_patterns=["*.json", "*.safetensors", "*.pt", "*.txt", "*.jinja",
                                                                   "*.model", "*.md"]))
