@@ -1,0 +1,40 @@
+{
+  "name": "kev-4b",
+  "backend": "http://127.0.0.1:8013/v1/systemone",
+  "n": 873,
+  "step_success": 0.2119,
+  "all_questions": {
+    "n": 1738,
+    "accuracy": 0.4534
+  },
+  "click_target": {
+    "n": 691,
+    "accuracy": 0.4602
+  },
+  "operation": {
+    "n": 873,
+    "accuracy": 0.3574
+  },
+  "select_target": {
+    "n": 64,
+    "accuracy": 0.8438
+  },
+  "target": {
+    "n": 865,
+    "accuracy": 0.5503
+  },
+  "target_k>1": {
+    "n": 789,
+    "accuracy": 0.507
+  },
+  "type_text_target": {
+    "n": 110,
+    "accuracy": 0.9455
+  },
+  "latency_ms_median": 667.5,
+  "latency_ms_p90": 976.0,
+  "failures": {},
+  "baselines": {
+    "operation_majority": "CLICK 0.7915"
+  }
+}

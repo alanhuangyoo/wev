@@ -1,0 +1,40 @@
+{
+  "name": "laya",
+  "backend": "laya:convaiinnovations/laya",
+  "n": 873,
+  "step_success": 0.0,
+  "all_questions": {
+    "n": 1738,
+    "accuracy": 0.0967
+  },
+  "click_target": {
+    "n": 691,
+    "accuracy": 0.0666
+  },
+  "operation": {
+    "n": 873,
+    "accuracy": 0.0252
+  },
+  "select_target": {
+    "n": 64,
+    "accuracy": 0.1406
+  },
+  "target": {
+    "n": 865,
+    "accuracy": 0.1688
+  },
+  "target_k>1": {
+    "n": 789,
+    "accuracy": 0.0887
+  },
+  "type_text_target": {
+    "n": 110,
+    "accuracy": 0.8273
+  },
+  "latency_ms_median": 45.3,
+  "latency_ms_p90": 47.5,
+  "failures": {},
+  "baselines": {
+    "operation_majority": "CLICK 0.7915"
+  }
+}

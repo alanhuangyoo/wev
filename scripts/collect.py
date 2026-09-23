@@ -31,6 +31,16 @@ def free_port():
         return s.getsockname()[1]
 
 
+def parse_line(line):
+    """A JSON decision line from trace_run.py, or None (a line cut off when the process was killed)."""
+    if not line.startswith("{"):
+        return None
+    try:
+        return json.loads(line)
+    except json.JSONDecodeError:
+        return None
+
+
 def kill_by_env(key, value):
     """Kill processes started with key=value in their environment: trace_run.py leaves a browser_harness daemon
     running after every episode, and thousands of them starve the machine."""
@@ -65,7 +75,7 @@ def run_episode(task, worker, a, out):
         trace = out / "traces" / f"{ep}.json"
         p = subprocess.run([str(JEV / ".venv/bin/python"), "trace_run.py", "--url", task["url"], "--goal", task["goal"],
                             "--out", str(trace)], cwd=JEV, env=env, capture_output=True, text=True, timeout=a.timeout)
-        lines = [json.loads(l) for l in p.stdout.splitlines() if l.startswith("{")]
+        lines = [x for x in map(parse_line, p.stdout.splitlines()) if x is not None]
         outcome = lines[-1]["status"] if lines else "no_state"
         if p.returncode != 0:
             tail = p.stderr.strip().splitlines()[-1] if p.stderr.strip() else ""

@@ -1,0 +1,112 @@
+{
+  "run": "exports/wev-8b",
+  "split": "test",
+  "dropped": 0,
+  "n": 1150,
+  "step_success": 0.6078,
+  "latency_ms_median": 404.1,
+  "latency_ms_p90": 873.9,
+  "operation_by_gold": {
+    "BLOCKED": {
+      "n": 29,
+      "recall": 0.0345
+    },
+    "CLICK": {
+      "n": 478,
+      "recall": 0.8389
+    },
+    "DONE": {
+      "n": 382,
+      "recall": 0.7958
+    },
+    "SCROLL_DOWN": {
+      "n": 52,
+      "recall": 0.0385
+    },
+    "SCROLL_UP": {
+      "n": 8,
+      "recall": 0.0
+    },
+    "TYPE_TEXT": {
+      "n": 201,
+      "recall": 0.7612
+    }
+  },
+  "premature_done_rate": 0.082,
+  "operation_confusion": {
+    "CLICK": {
+      "CLICK": 401,
+      "DONE": 40,
+      "TYPE_TEXT": 36,
+      "SCROLL_DOWN": 1
+    },
+    "DONE": {
+      "CLICK": 72,
+      "DONE": 304,
+      "TYPE_TEXT": 6
+    },
+    "TYPE_TEXT": {
+      "TYPE_TEXT": 153,
+      "CLICK": 45,
+      "DONE": 3
+    },
+    "SCROLL_DOWN": {
+      "SCROLL_DOWN": 2,
+      "CLICK": 41,
+      "DONE": 8,
+      "TYPE_TEXT": 1
+    },
+    "BLOCKED": {
+      "DONE": 11,
+      "CLICK": 15,
+      "BLOCKED": 1,
+      "TYPE_TEXT": 2
+    },
+    "SCROLL_UP": {
+      "CLICK": 7,
+      "DONE": 1
+    }
+  },
+  "operation": {
+    "n": 1150,
+    "accuracy": 0.7487,
+    "ece": 0.0685,
+    "mean_confidence": 0.815,
+    "chance": 0.1776
+  },
+  "all_questions": {
+    "n": 1829,
+    "accuracy": 0.7354,
+    "ece": 0.0589,
+    "mean_confidence": 0.7935,
+    "chance": 0.2313
+  },
+  "target": {
+    "n": 679,
+    "accuracy": 0.7128,
+    "ece": 0.0456,
+    "mean_confidence": 0.757,
+    "chance": 0.3223
+  },
+  "click_target": {
+    "n": 478,
+    "accuracy": 0.6025,
+    "ece": 0.0622,
+    "mean_confidence": 0.6626,
+    "chance": 0.0717
+  },
+  "target_k>1": {
+    "n": 504,
+    "accuracy": 0.6131,
+    "ece": 0.0614,
+    "mean_confidence": 0.6726,
+    "chance": 0.087
+  },
+  "type_text_target": {
+    "n": 201,
+    "accuracy": 0.9751,
+    "ece": 0.0113,
+    "mean_confidence": 0.9813,
+    "chance": 0.9183
+  }
+}

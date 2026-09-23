@@ -1,0 +1,16 @@
+{
+  "name": "kev-8b",
+  "backend": "http://127.0.0.1:8013/v1/systemone",
+  "n": 400,
+  "step_success": 0.135,
+  "all_questions": {
+    "n": 2000,
+    "accuracy": 0.627
+  },
+  "latency_ms_median": 69.3,
+  "latency_ms_p90": 70.8,
+  "failures": {},
+  "baselines": {
+    "operation_majority": "- 1.0000"
+  }
+}

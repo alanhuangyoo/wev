@@ -1,0 +1,88 @@
+{
+  "run": "exports/wev-8b",
+  "split": "test",
+  "dropped": 13,
+  "n": 862,
+  "step_success": 0.7645,
+  "latency_ms_median": 599.5,
+  "latency_ms_p90": 1336.6,
+  "operation_by_gold": {
+    "CLICK": {
+      "n": 687,
+      "recall": 0.9505
+    },
+    "SELECT": {
+      "n": 65,
+      "recall": 0.8769
+    },
+    "TYPE_TEXT": {
+      "n": 110,
+      "recall": 0.7091
+    }
+  },
+  "premature_done_rate": 0.0,
+  "operation_confusion": {
+    "SELECT": {
+      "SELECT": 57,
+      "CLICK": 8
+    },
+    "CLICK": {
+      "CLICK": 653,
+      "TYPE_TEXT": 24,
+      "SELECT": 10
+    },
+    "TYPE_TEXT": {
+      "TYPE_TEXT": 78,
+      "CLICK": 32
+    }
+  },
+  "operation": {
+    "n": 862,
+    "accuracy": 0.9142,
+    "ece": 0.0215,
+    "mean_confidence": 0.9344,
+    "chance": 0.1815
+  },
+  "all_questions": {
+    "n": 1718,
+    "accuracy": 0.8754,
+    "ece": 0.0295,
+    "mean_confidence": 0.905,
+    "chance": 0.1693
+  },
+  "target": {
+    "n": 856,
+    "accuracy": 0.8364,
+    "ece": 0.0389,
+    "mean_confidence": 0.8753,
+    "chance": 0.157
+  },
+  "select_target": {
+    "n": 59,
+    "accuracy": 0.8475,
+    "ece": 0.0754,
+    "mean_confidence": 0.8698,
+    "chance": 0.1369
+  },
+  "target_k>1": {
+    "n": 780,
+    "accuracy": 0.8205,
+    "ece": 0.0427,
+    "mean_confidence": 0.8632,
+    "chance": 0.0749
+  },
+  "click_target": {
+    "n": 687,
+    "accuracy": 0.8137,
+    "ece": 0.0475,
+    "mean_confidence": 0.859,
+    "chance": 0.0512
+  },
+  "type_text_target": {
+    "n": 110,
+    "accuracy": 0.9727,
+    "ece": 0.0253,
+    "mean_confidence": 0.9806,
+    "chance": 0.8288
+  }
+}

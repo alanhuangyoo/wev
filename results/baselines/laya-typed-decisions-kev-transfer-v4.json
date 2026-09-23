@@ -1,0 +1,16 @@
+{
+  "name": "laya-typed-decisions",
+  "backend": "laya:convaiinnovations/laya-typed-decisions",
+  "n": 764,
+  "step_success": 0.6283,
+  "all_questions": {
+    "n": 764,
+    "accuracy": 0.6283
+  },
+  "latency_ms_median": 7.9,
+  "latency_ms_p90": 8.2,
+  "failures": {},
+  "baselines": {
+    "operation_majority": "- 1.0000"
+  }
+}

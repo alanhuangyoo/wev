@@ -1,0 +1,111 @@
+{
+  "run": "exports/wev-4b",
+  "split": "test",
+  "dropped": 0,
+  "n": 1150,
+  "step_success": 0.6104,
+  "latency_ms_median": 398.1,
+  "latency_ms_p90": 624.7,
+  "operation_by_gold": {
+    "BLOCKED": {
+      "n": 29,
+      "recall": 0.0345
+    },
+    "CLICK": {
+      "n": 478,
+      "recall": 0.8285
+    },
+    "DONE": {
+      "n": 382,
+      "recall": 0.8063
+    },
+    "SCROLL_DOWN": {
+      "n": 52,
+      "recall": 0.0
+    },
+    "SCROLL_UP": {
+      "n": 8,
+      "recall": 0.0
+    },
+    "TYPE_TEXT": {
+      "n": 201,
+      "recall": 0.7861
+    }
+  },
+  "premature_done_rate": 0.0833,
+  "operation_confusion": {
+    "CLICK": {
+      "CLICK": 396,
+      "DONE": 38,
+      "TYPE_TEXT": 44
+    },
+    "DONE": {
+      "CLICK": 67,
+      "DONE": 308,
+      "TYPE_TEXT": 6,
+      "SCROLL_UP": 1
+    },
+    "TYPE_TEXT": {
+      "TYPE_TEXT": 158,
+      "CLICK": 36,
+      "DONE": 6,
+      "SCROLL_UP": 1
+    },
+    "SCROLL_DOWN": {
+      "DONE": 14,
+      "CLICK": 37,
+      "TYPE_TEXT": 1
+    },
+    "BLOCKED": {
+      "DONE": 6,
+      "CLICK": 17,
+      "TYPE_TEXT": 5,
+      "BLOCKED": 1
+    },
+    "SCROLL_UP": {
+      "CLICK": 8
+    }
+  },
+  "operation": {
+    "n": 1150,
+    "accuracy": 0.7504,
+    "ece": 0.0651,
+    "mean_confidence": 0.8155,
+    "chance": 0.1776
+  },
+  "all_questions": {
+    "n": 1829,
+    "accuracy": 0.7348,
+    "ece": 0.0621,
+    "mean_confidence": 0.7933,
+    "chance": 0.2313
+  },
+  "target": {
+    "n": 679,
+    "accuracy": 0.7084,
+    "ece": 0.0579,
+    "mean_confidence": 0.7557,
+    "chance": 0.3223
+  },
+  "click_target": {
+    "n": 478,
+    "accuracy": 0.5983,
+    "ece": 0.0778,
+    "mean_confidence": 0.661,
+    "chance": 0.0717
+  },
+  "target_k>1": {
+    "n": 504,
+    "accuracy": 0.6071,
+    "ece": 0.078,
+    "mean_confidence": 0.6708,
+    "chance": 0.087
+  },
+  "type_text_target": {
+    "n": 201,
+    "accuracy": 0.9701,
+    "ece": 0.0196,
+    "mean_confidence": 0.9807,
+    "chance": 0.9183
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "run": "exports/wev-8b",
+  "split": "test",
+  "dropped": 0,
+  "n": 764,
+  "step_success": 0.7723,
+  "latency_ms_median": 24.7,
+  "latency_ms_p90": 65.2,
+  "operation_by_gold": {},
+  "operation_confusion": {},
+  "answer": {
+    "n": 232,
+    "accuracy": 0.7586,
+    "ece": 0.0934,
+    "mean_confidence": 0.8049,
+    "chance": 0.2448
+  },
+  "all_questions": {
+    "n": 764,
+    "accuracy": 0.7723,
+    "ece": 0.0458,
+    "mean_confidence": 0.7879,
+    "chance": 0.3628
+  },
+  "emotion": {
+    "n": 116,
+    "accuracy": 0.5603,
+    "ece": 0.1717,
+    "mean_confidence": 0.7088,
+    "chance": 0.1642
+  },
+  "offensive": {
+    "n": 80,
+    "accuracy": 0.875,
+    "ece": 0.0339,
+    "mean_confidence": 0.868,
+    "chance": 0.5
+  },
+  "answers": {
+    "n": 80,
+    "accuracy": 0.8875,
+    "ece": 0.1949,
+    "mean_confidence": 0.6926,
+    "chance": 0.5
+  },
+  "paraphrase": {
+    "n": 80,
+    "accuracy": 0.9,
+    "ece": 0.0711,
+    "mean_confidence": 0.8352,
+    "chance": 0.5
+  },
+  "decision": {
+    "n": 176,
+    "accuracy": 0.7727,
+    "ece": 0.0788,
+    "mean_confidence": 0.8032,
+    "chance": 0.4621
+  }
+}

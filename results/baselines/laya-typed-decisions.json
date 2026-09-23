@@ -1,0 +1,16 @@
+{
+  "name": "laya",
+  "backend": "laya:convaiinnovations/laya",
+  "n": 400,
+  "step_success": 0.0175,
+  "all_questions": {
+    "n": 2000,
+    "accuracy": 0.362
+  },
+  "latency_ms_median": 15.4,
+  "latency_ms_p90": 17.7,
+  "failures": {},
+  "baselines": {
+    "operation_majority": "- 1.0000"
+  }
+}
