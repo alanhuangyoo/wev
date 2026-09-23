@@ -40,7 +40,10 @@ def main():
     info = {"format": FORMAT, "version": 1, "name": a.name or out.name, "base": meta["base"],
             "head_type": meta.get("head_type", "pointer"), "head_dim": meta.get("head_dim", 256),
             "keep_layers": meta.get("keep_layers"), "num_layers": backbone.config.num_hidden_layers,
-            "max_state": meta.get("max_state"), "max_branch": meta.get("max_branch"), "backbone_dtype": a.dtype,
+            # inference limits: a page with hundreds of targets (an open date picker) needs more per question than
+            # the 2048 tokens training used, and answering beyond the training range beats rejecting the step
+            "max_state": meta.get("max_state"), "max_branch": max(meta.get("max_branch") or 0, 8192),
+            "train_max_state": meta.get("max_state"), "train_max_branch": meta.get("max_branch"), "backbone_dtype": a.dtype,
             "train_args": meta.get("train_args")}
     (out / "wev.json").write_text(json.dumps(info, indent=2))
     print(f"exported {a.run} -> {out} ({backbone.config.num_hidden_layers} layers, {a.dtype})", flush=True)

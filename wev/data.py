@@ -35,7 +35,18 @@ def labelled_record(row: dict):
             idx = int(bool(y))
         else:
             idx = int(y)
-        qs.append({**q, "label": idx})
+        soft = (row.get("soft_labels") or {}).get(m["id"])
+        if soft is not None:
+            # soft label: a probability per option, in the order the question renders its options
+            if m["type"] == "choice":
+                soft = [float(soft.get(k, 0.0)) for k in m["keys"]]
+            elif m["type"] == "noul":
+                soft = [float(soft.get("false", 0.0)), float(soft.get("true", 0.0))]
+            else:
+                soft = [float(x) for x in soft]
+            total = sum(soft)
+            soft = [x / total for x in soft] if total > 0 and len(soft) == len(q["options"]) else None
+        qs.append({**q, "label": idx, "soft": soft})
         ms.append(m)
     return {"state": rec["state"], "questions": qs}, ms
 

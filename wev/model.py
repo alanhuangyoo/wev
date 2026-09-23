@@ -72,7 +72,8 @@ def encode(tok, rec: dict, max_state: int = MAX_STATE, max_branch: int = MAX_BRA
         decide_idx.append(base + len(branch) - 1)
         opt_idx.append(ends)
     return {"ids": ids, "seg": seg, "pos": pos, "decide_idx": decide_idx, "opt_idx": opt_idx,
-            "labels": [q.get("label") for q in rec["questions"]], "n_state": len(prefix)}
+            "labels": [q.get("label") for q in rec["questions"]], "soft": [q.get("soft") for q in rec["questions"]],
+            "n_state": len(prefix)}
 
 
 def branch_mask_batch(segs: list[list[int]], device, dtype, length: int | None = None) -> torch.Tensor:
