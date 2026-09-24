@@ -15,6 +15,7 @@ def main():
     ap.add_argument("--model", required=True)
     ap.add_argument("--data", required=True)
     ap.add_argument("--out", required=True, help="jsonl of premature-DONE cases (model DONE, label not DONE)")
+    ap.add_argument("--curve", default="", help="also write the recall / premature curve over thresholds 0.01..0.99 as JSON")
     a = ap.parse_args()
     m = wev.load(a.model)
     rows = [json.loads(l) for l in open(a.data)]
@@ -41,6 +42,11 @@ def main():
     print(f"{'threshold':>9} {'DONE recall':>11} {'premature':>9}")
     for t in (0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95):
         print(f"{t:>9.2f} {sum(p >= t for p in done) / len(done):>11.3f} {sum(p >= t for p in other) / len(other):>9.3f}")
+    if a.curve:
+        ts = [i / 100 for i in range(1, 100)]
+        json.dump({"model": a.model, "n_done": len(done), "n_other": len(other), "thresholds": ts,
+                   "recall": [sum(p >= t for p in done) / len(done) for t in ts],
+                   "premature": [sum(p >= t for p in other) / len(other) for t in ts]}, open(a.curve, "w"))
 
 
 if __name__ == "__main__":

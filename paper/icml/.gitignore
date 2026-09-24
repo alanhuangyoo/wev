@@ -1,0 +1,8 @@
+*.aux
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.bbl
+arxiv.tar.gz
