@@ -36,8 +36,8 @@ out = m.predict(
     },
 )
 out["answers"]
-# {'action': {'type': 'choice', 'choice': 'replace', 'probabilities': {'refund': 0.42, 'replace': 0.53, ...}},
-#  'fraud_risk': {'type': 'noul', 'noul': 0.04}}
+# {'action': {'type': 'choice', 'choice': 'replace', 'probabilities': {'refund': 0.38, 'replace': 0.51, ...}},
+#  'fraud_risk': {'type': 'noul', 'noul': 0.02}}
 ```
 
 Serve it over HTTP, with the same request and response shapes as a System One API:
@@ -119,7 +119,8 @@ Every question in a request is answered in the same pass.
 | wev-4b | 15 ms | 25 ms | 217 ms |
 | wev-8b | 21 ms | 37 ms | 322 ms |
 
-Reproduce with `scripts/bench_latency.py --model <export> --data <jsonl>...`.
+On a laptop (Apple M5, PyTorch MPS backend, fp32), wev-1.7b loads in about 30 s and answers a one-question decision in
+77 ms. Reproduce with `scripts/bench_latency.py --model <export> --data <jsonl>...`.
 
 ## How it works
 
