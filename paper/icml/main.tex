@@ -12,10 +12,6 @@
 \usepackage{amssymb}
 \usepackage{mathtools}
 \usepackage[capitalize,noabbrev]{cleveref}
-\usepackage{tikz}
-\usetikzlibrary{positioning,arrows.meta,fit,backgrounds}
-\usepackage{pgfplots}
-\pgfplotsset{compat=1.18}
 \usepackage{xspace}
 
 \newcommand{\wev}{\textsc{wev}\xspace}
@@ -73,7 +69,7 @@ general decision data, meaning classification, question answering and rule recor
 is different in kind. Its state is a page of text and a list of 8--40 candidate elements, about 3{,}200 tokens in our
 data, and its answer is grounded in that page rather than in world knowledge or in a rubric. Scored on identical
 requests, Kev-4B and Kev-8B get 21\% and 19\% of steps on unseen websites fully right and Laya under 1\%
-(\cref{sec:results-browser}).
+(\cref{fig:teaser}).
 
 The obstacle to closing this gap is supervision. Web demonstrations exist \citep{deng2023mind2web,murty2024nnetnav,lu2024weblinx},
 but they are recorded in other action formats, they rarely contain the stopping and blocking decisions an agent needs,
@@ -82,7 +78,7 @@ slow. Our key observation is that the decision interface itself makes supervisio
 agent's typed requests while the agent works on live websites, every logged request--answer pair is already a training
 example in the student's input and output format, with no translation between action spaces. What remains is to decide
 which episodes to trust, and an LLM judge \citep{zheng2023judging} that reads the final page can make that decision.
-We call this procedure \emph{interface distillation}.
+We call this procedure \emph{interface distillation} (\cref{fig:overview}).
 
 We build \wev on this observation. A non-generative decision model is trained on three sources: episodes
 from interface distillation with qwen3-max \citep{yang2025qwen3} as the teacher; Mind2Web and NNetNav steps converted
@@ -111,37 +107,12 @@ below 22\% step success on unseen websites; \wev reaches 68--76\% while remainin
 
 \begin{figure*}[t]
 \centering
-\begin{tikzpicture}[
-  font=\small,
-  box/.style={draw, rounded corners=2pt, align=center, minimum height=8mm, inner sep=3pt, fill=white},
-  src/.style={box, fill=blue!6},
-  mdl/.style={box, fill=orange!10},
-  arr/.style={-{Stealth[length=2mm]}, thick},
-  lab/.style={font=\scriptsize, align=center}
-]
-\node[box, minimum width=24mm] (web) {live website};
-\node[box, right=10mm of web, minimum width=26mm] (agent) {browser agent\\(jev-ultrafast)};
-\node[mdl, right=22mm of agent, minimum width=30mm] (teacher) {teacher System One\\prompted LLM (qwen3-max)};
-\node[box, below=7mm of teacher, minimum width=30mm] (log) {decision log\\(request, answer) per step};
-\node[box, left=10mm of log, minimum width=26mm] (judge) {LLM judge on the\\final page of each episode};
-\node[src, below=6mm of judge, minimum width=26mm] (teach) {judge-verified\\teacher episodes};
-\node[src, left=4mm of teach, minimum width=27mm] (demo) {Mind2Web + NNetNav\\steps (DONE audited)};
-\node[src, left=4mm of demo, minimum width=24mm] (gen) {general typed-\\decision corpora};
-\node[mdl, right=12mm of teach, minimum width=30mm] (student) {\textbf{\wev} decision model, Qwen3 + LoRA\\serves the same interface locally};
-\draw[arr] (web) -- node[lab, above]{page} (agent);
-\draw[arr] (agent.east) ++(0,1.5mm) -- node[lab, above]{typed request:\\operation? target?} ++(22mm,0);
-\draw[arr] (teacher.west) ++(0,-1.5mm) -- node[lab, below]{probabilities} ++(-22mm,0);
-\draw[arr] (teacher) -- (log);
-\draw[arr] (log) -- (judge);
-\draw[arr] (judge) -- node[lab, right]{keep / drop} (teach);
-\draw[arr] (teach) -- node[lab, above]{train} (student);
-\draw[arr] (gen.south) |- ++(0,-3mm) -| ([xshift=-6mm]student.south);
-\draw[arr] (demo.south) |- ++(0,-2mm) -| ([xshift=6mm]student.south);
-\end{tikzpicture}
+\includegraphics[width=0.92\textwidth]{figures/fig_overview.png}
 \caption{Interface distillation. A browser agent sends typed requests to a System One served by a prompted LLM while
 it works on live websites; every request and answer is logged in the decision model's own format, and an LLM judge
 reading each episode's final page decides which episodes are kept. The student \wev trains on these episodes together
-with converted demonstrations and general decision corpora, and then serves the same interface locally.}
+with converted demonstrations and general decision corpora, and then serves the same interface locally.
+(Illustration drawn with an image-generation model from a written specification and checked by the authors.)}
 \label{fig:overview}
 \end{figure*}
 
