@@ -8,15 +8,15 @@ Typed questions in, calibrated probabilities out, in one forward pass. No text g
 [![Models](https://img.shields.io/badge/%F0%9F%A4%97%20Models-1.7B%20%7C%204B%20%7C%208B-ffcc4d)](https://huggingface.co/collections/alanhuangya/wev-6ab4eb5d872c9ae9fd68faa6)
 [![Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Dataset-wev--data-ffcc4d)](https://huggingface.co/datasets/alanhuangya/wev-data)
 [![pip](https://img.shields.io/badge/pip%20install-wev--ai-3775a9?logo=pypi&logoColor=white)](https://pypi.org/project/wev-ai/)
-[![Paper](https://img.shields.io/badge/Paper-PDF-b31b1b)](paper/icml/main.pdf)
-[![License](https://img.shields.io/badge/License-Apache--2.0-2ea44f)](LICENSE)
+[![Paper](https://img.shields.io/badge/Paper-PDF-b31b1b)](https://github.com/alanhuangyoo/wev/blob/main/paper/icml/main.pdf)
+[![License](https://img.shields.io/badge/License-Apache--2.0-2ea44f)](https://github.com/alanhuangyoo/wev/blob/main/LICENSE)
 
 [Quickstart](#quickstart) · [Results](#results) · [How it works](#how-it-works) · [Train your own](#train-your-own) · [Citation](#citation)
 
 </div>
 
 <p align="center">
-  <img src="assets/overview.png" width="88%" alt="Interface distillation: a browser agent's typed requests are answered by a teacher LLM on live websites, an LLM judge keeps the verified episodes, and the wev decision model trained on them serves the same interface locally.">
+  <img src="https://raw.githubusercontent.com/alanhuangyoo/wev/main/assets/overview.png" width="88%" alt="Interface distillation: a browser agent's typed requests are answered by a teacher LLM on live websites, an LLM judge keeps the verified episodes, and the wev decision model trained on them serves the same interface locally.">
 </p>
 
 `wev` answers the `POST /v1/systemone` request shape: a free-form state plus any number of questions, each a
@@ -85,7 +85,7 @@ change that one line.
 
 ## Results
 
-<p align="center"><img src="assets/teaser.png" width="52%" alt="Browser step success against out-of-domain general accuracy for wev, Kev and Laya."></p>
+<p align="center"><img src="https://raw.githubusercontent.com/alanhuangyoo/wev/main/assets/teaser.png" width="52%" alt="Browser step success against out-of-domain general accuracy for wev, Kev and Laya."></p>
 
 Every model below receives the same requests and is scored the same way: per-question accuracy, with each model's
 most probable option taken as its answer. All numbers are on held-out test splits.
@@ -137,14 +137,14 @@ succeeds when the agent says DONE and an LLM judge, reading the final page, agre
   teacher collection held on a paired comparison (10 tasks gained, 1 lost).
 - Test splits were held out from training and model selection, with one exception: wev-4b and wev-8b each had two
   candidates, and both were read on test.
-- Raw results are in [`results/`](results).
+- Raw results are in [`results/`](https://github.com/alanhuangyoo/wev/tree/main/results).
 
 </details>
 
 <details>
 <summary><b>Calibration: choosing when to stop</b></summary>
 
-<p align="center"><img src="assets/stopping.png" width="55%" alt="DONE recall against premature DONE rate as the threshold on the DONE probability is swept."></p>
+<p align="center"><img src="https://raw.githubusercontent.com/alanhuangyoo/wev/main/assets/stopping.png" width="55%" alt="DONE recall against premature DONE rate as the threshold on the DONE probability is swept."></p>
 
 The hardest browser decision is when to stop. Accepting DONE only above a probability threshold trades missed stops
 for early ones: at 0.8, wev-4b stops early on 3.8% of unfinished steps (8.5% at 0.5), and wev-8b on 1.7%.
@@ -172,7 +172,7 @@ scores into probabilities.
 <q> which element to CLICK? <opt> [1] Search </opt> <opt> [2] Sign in </opt> … <decide>
 ```
 
-The [paper](paper/icml/main.pdf) has the full method, ablations and failure analysis.
+The [paper](https://github.com/alanhuangyoo/wev/blob/main/paper/icml/main.pdf) has the full method, ablations and failure analysis.
 
 ## Train your own
 
@@ -258,4 +258,4 @@ Jun Huang and Xin Ren contributed equally (University of Electronic Science and 
 Apache-2.0. The model code builds on [kev](https://github.com/jaredpalmer/kev) (Apache-2.0) and uses instruction text
 from [jev-ultrafast](https://github.com/browser-use/jev-ultrafast) (MIT); the models build on Qwen3 base models
 (Apache-2.0). wev is an independent project, not affiliated with TypeSafe AI, and does not use Jev. See
-[NOTICE](NOTICE).
+[NOTICE](https://github.com/alanhuangyoo/wev/blob/main/NOTICE).
