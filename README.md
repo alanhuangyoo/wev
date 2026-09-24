@@ -8,7 +8,8 @@ Typed questions in, calibrated probabilities out, in one forward pass. No text g
 [![Models](https://img.shields.io/badge/%F0%9F%A4%97%20Models-1.7B%20%7C%204B%20%7C%208B-ffcc4d)](https://huggingface.co/collections/alanhuangya/wev-6ab4eb5d872c9ae9fd68faa6)
 [![Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Dataset-wev--data-ffcc4d)](https://huggingface.co/datasets/alanhuangya/wev-data)
 [![pip](https://img.shields.io/badge/pip%20install-wev--ai-3775a9?logo=pypi&logoColor=white)](https://pypi.org/project/wev-ai/)
-[![Paper](https://img.shields.io/badge/Paper-PDF-b31b1b)](https://github.com/alanhuangyoo/wev/blob/main/paper/icml/main.pdf)
+[![Paper](https://img.shields.io/badge/Paper-Zenodo-b31b1b)](https://zenodo.org/records/22941164)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22941164.svg)](https://zenodo.org/records/22941164)
 [![License](https://img.shields.io/badge/License-Apache--2.0-2ea44f)](https://github.com/alanhuangyoo/wev/blob/main/LICENSE)
 
 [Quickstart](#quickstart) · [Results](#results) · [How it works](#how-it-works) · [Train your own](#train-your-own) · [Citation](#citation)
@@ -172,7 +173,7 @@ scores into probabilities.
 <q> which element to CLICK? <opt> [1] Search </opt> <opt> [2] Sign in </opt> … <decide>
 ```
 
-The [paper](https://github.com/alanhuangyoo/wev/blob/main/paper/icml/main.pdf) has the full method, ablations and failure analysis.
+The [paper](https://zenodo.org/records/22941164) has the full method, ablations and failure analysis.
 
 ## Train your own
 
@@ -246,10 +247,12 @@ Jun Huang and Xin Ren contributed equally (University of Electronic Science and 
 
 ```bibtex
 @misc{huang2026wev,
-  title  = {wev: Distilling LLM Browser Agents into Open, Local System-One Decision Models},
-  author = {Huang, Jun and Ren, Xin},
-  year   = {2026},
-  url    = {https://github.com/alanhuangyoo/wev}
+  title     = {wev: Distilling LLM Browser Agents into Open, Local System-One Decision Models},
+  author    = {Huang, Jun and Ren, Xin},
+  year      = {2026},
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.22941164},
+  url       = {https://doi.org/10.5281/zenodo.22941164}
 }
 ```
 

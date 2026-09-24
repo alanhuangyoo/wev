@@ -91,7 +91,8 @@ the `POST /v1/systemone` request shape (choice, yes/no and score questions over 
 decisions and for browser-agent steps (*which operation? which element?*). It runs on your own GPU: no API key,
 no per-call cost, nothing generated.
 
-Code, training and evaluation: [{a.github.split('github.com/')[1]}]({a.github}). Independent project; not affiliated
+Code, training and evaluation: [{a.github.split('github.com/')[1]}]({a.github}). Paper:
+[doi:10.5281/zenodo.22941164](https://zenodo.org/records/22941164). Independent project; not affiliated
 with TypeSafe AI.
 
 ## Quickstart
@@ -195,10 +196,12 @@ Jun Huang and Xin Ren contributed equally (University of Electronic Science and 
 
 ```bibtex
 @misc{{huang2026wev,
-  title  = {{wev: Distilling LLM Browser Agents into Open, Local System-One Decision Models}},
-  author = {{Huang, Jun and Ren, Xin}},
-  year   = {{2026}},
-  url    = {{https://github.com/alanhuangyoo/wev}}
+  title     = {{wev: Distilling LLM Browser Agents into Open, Local System-One Decision Models}},
+  author    = {{Huang, Jun and Ren, Xin}},
+  year      = {{2026}},
+  publisher = {{Zenodo}},
+  doi       = {{10.5281/zenodo.22941164}},
+  url       = {{https://doi.org/10.5281/zenodo.22941164}}
 }}
 ```
 

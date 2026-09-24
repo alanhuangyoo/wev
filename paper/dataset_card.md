@@ -141,10 +141,12 @@ Jun Huang and Xin Ren contributed equally (University of Electronic Science and 
 
 ```bibtex
 @misc{huang2026wev,
-  title  = {wev: Distilling LLM Browser Agents into Open, Local System-One Decision Models},
-  author = {Huang, Jun and Ren, Xin},
-  year   = {2026},
-  url    = {https://github.com/alanhuangyoo/wev}
+  title     = {wev: Distilling LLM Browser Agents into Open, Local System-One Decision Models},
+  author    = {Huang, Jun and Ren, Xin},
+  year      = {2026},
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.22941164},
+  url       = {https://doi.org/10.5281/zenodo.22941164}
 }
 ```
 
