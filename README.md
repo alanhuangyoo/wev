@@ -10,7 +10,7 @@ call, and it generates no text.
 | model | size | for |
 |---|---|---|
 | [wev-1.7b](https://huggingface.co/alanhuangya/wev-1.7b) | 3.5 GB | laptops and small GPUs; the fastest |
-| [**wev-4b**](https://huggingface.co/alanhuangya/wev-4b) | 8.1 GB | the default; one consumer GPU |
+| [**wev-4b**](https://huggingface.co/alanhuangya/wev-4b) | 8.1 GB | the default; one consumer GPU; best on live websites |
 | [wev-8b](https://huggingface.co/alanhuangya/wev-8b) | 15.2 GB | the most accurate, especially out of domain |
 
 > `wev` is an independent project. It is not affiliated with TypeSafe AI and does not use Jev.
@@ -63,8 +63,8 @@ the same way: per-question accuracy, with each model's top option taken as its a
 | model | kev decision-v7 | kev transfer-v4 | typed-decisions |
 |---|---|---|---|
 | **wev-8b** | 82.4 | 77.2 | 79.1 |
-| **wev-4b** | 80.6 | 73.3 | **79.6** |
-| **wev-1.7b** | 81.1 | 65.5 | 79.5 |
+| **wev-4b** | 80.6 | 73.8 | 79.4 |
+| **wev-1.7b** | 81.1 | 65.5 | **79.5** |
 | Kev-4B | **88.2** | **82.1** | 65.1 |
 | Kev-8B | 88.1 | 76.8 | 62.7 |
 | Laya (typed-decisions) | 65.7 | 62.8 | 76.8 |
@@ -82,8 +82,8 @@ in jev-ultrafast's request format. A step succeeds when both the operation and t
 
 | model | step success | operation |
 |---|---|---|
-| **wev-8b** | **75.5** | **90.3** |
-| **wev-4b** | 75.4 | 90.0 |
+| **wev-4b** | **75.9** | **91.2** |
+| **wev-8b** | 75.5 | 90.3 |
 | **wev-1.7b** | 68.2 | 88.1 |
 | Kev-4B | 21.2 | 35.7 |
 | Kev-8B | 19.0 | 73.3 |
@@ -98,11 +98,13 @@ as a success when the agent says DONE and an LLM judge, reading the final page, 
 
 | System One | tasks completed |
 |---|---|
-| **wev-8b** | **28 / 153 (18.3%)** |
-| wev-4b | 21 / 153 (13.7%) |
+| **wev-4b** | **30 / 153 (19.6%)** |
+| wev-8b | 28 / 153 (18.3%) |
 | qwen3-max, prompted (the teacher) | 27 / 153 (17.6%) |
 
-Live sites differ from run to run, so treat gaps of a few tasks as noise. Google Flights often answers automated
+Live sites differ from run to run: two runs of wev-8b variants with the same score disagreed on 8 tasks each way,
+so treat gaps of a few tasks as noise. wev-4b's gain over its previous version (30 vs 21) held on a paired
+comparison: 10 tasks gained and 1 lost. Google Flights often answers automated
 browsing with a CAPTCHA, and every model fails most of those tasks.
 
 **Speed.** These are median in-process latencies on one RTX 5090 in bf16, with a warm model, one request at a time.
@@ -169,9 +171,11 @@ python scripts/judge_done.py --data data/nnetnav-v2/train.jsonl --out judge-trai
 python scripts/apply_judge.py --data data/nnetnav-v2 --judge 'judge-{split}.jsonl' --out data/nnetnav-v3-clean
 
 # the wev-4b recipe; dir:K repeats a training file K times. One GPU works too: drop torchrun.
+# wev-8b and wev-1.7b use the same mix without data/teacher-v2 (the second teacher collection). On 8B it left
+# live-web success unchanged and cost about 2 points on kev transfer-v4, so wev-8b keeps the earlier mix.
 torchrun --nproc_per_node 8 -m wev.train --base Qwen/Qwen3-4B-Base --head pointer --lr 1e-4 --epochs 1 \
   --batch_tokens 6000 --accum 1 --checkpointing 0 --out runs/wev-4b \
-  --data data/m2w-v2,data/nnetnav-v3-clean,data/teacher-v1:3,data/general/kev-v7:2,data/general/typed-decisions-train:8,data/ext/tasksource-jev,data/ext/jev-distill,data/ext/td-synth
+  --data data/m2w-v2,data/nnetnav-v3-clean,data/teacher-v1:3,data/teacher-v2:3,data/general/kev-v7:2,data/general/typed-decisions-train:8,data/ext/tasksource-jev,data/ext/jev-distill,data/ext/td-synth
 
 wev evaluate --model runs/wev-4b --data data/general/kev-transfer-v4 --split dev
 wev export --run runs/wev-4b --out exports/wev-4b --check data/general/typed-decisions/dev.jsonl
