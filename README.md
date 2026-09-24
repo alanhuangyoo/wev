@@ -1,19 +1,50 @@
+<div align="center">
+
 # wev
 
-**A local decision model. Typed questions in, calibrated probabilities out, in one forward pass.**
+**Local System-One decision models for agents.**<br>
+Typed questions in, calibrated probabilities out, in one forward pass. No text generation, no API key.
 
-`wev` answers the `POST /v1/systemone` request shape: a free-form state plus any number of questions, each a choice,
-a yes/no (`noul`) or a score. It covers general decisions (triage, routing, policy checks, agent monitoring) and
-browser-agent steps (*which operation? which element?*). It runs on your own GPU. You need no API key, pay nothing per
-call, and it generates no text.
+[![Models](https://img.shields.io/badge/%F0%9F%A4%97%20Models-1.7B%20%7C%204B%20%7C%208B-ffcc4d)](https://huggingface.co/collections/alanhuangya/wev-6ab4eb5d872c9ae9fd68faa6)
+[![Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Dataset-wev--data-ffcc4d)](https://huggingface.co/datasets/alanhuangya/wev-data)
+[![pip](https://img.shields.io/badge/pip%20install-wev--ai-3775a9?logo=pypi&logoColor=white)](https://pypi.org/project/wev-ai/)
+[![Paper](https://img.shields.io/badge/Paper-PDF-b31b1b)](paper/icml/main.pdf)
+[![License](https://img.shields.io/badge/License-Apache--2.0-2ea44f)](LICENSE)
 
-| model | size | for |
-|---|---|---|
-| [wev-1.7b](https://huggingface.co/alanhuangya/wev-1.7b) | 3.5 GB | laptops and small GPUs; the fastest |
-| [**wev-4b**](https://huggingface.co/alanhuangya/wev-4b) | 8.1 GB | the default; one consumer GPU; best on live websites |
-| [wev-8b](https://huggingface.co/alanhuangya/wev-8b) | 15.2 GB | the most accurate, especially out of domain |
+[Quickstart](#quickstart) · [Results](#results) · [How it works](#how-it-works) · [Train your own](#train-your-own) · [Citation](#citation)
 
-> `wev` is an independent project. It is not affiliated with TypeSafe AI and does not use Jev.
+</div>
+
+<p align="center">
+  <img src="assets/overview.png" width="88%" alt="Interface distillation: a browser agent's typed requests are answered by a teacher LLM on live websites, an LLM judge keeps the verified episodes, and the wev decision model trained on them serves the same interface locally.">
+</p>
+
+`wev` answers the `POST /v1/systemone` request shape: a free-form state plus any number of questions, each a
+**choice**, a **yes/no** or a **score**. It handles general decisions such as triage, routing, policy checks and
+agent monitoring, and it handles browser-agent steps: *which operation?* and *which element?* It runs on your own
+GPU, or on a laptop.
+
+## Highlights
+
+- 🌐 **Browser steps on unseen websites: 76% right**, where open decision models trained on general data reach at
+  most 21%.
+- 🧠 **General decisions stay strong.** wev beats Laya on every general benchmark, and wev-8b is level with Kev-8B out
+  of domain.
+- 🎓 **As good as its teacher, locally.** As the System One of an open browser agent, wev completes as many live
+  tasks as the LLM it was distilled from.
+- ⚡ **Fast.** 10–37 ms for a general decision and 91–322 ms for a full browser page on one RTX 5090; 77 ms on a
+  laptop.
+- 📏 **Calibrated.** Probabilities you can threshold: raise the bar for DONE and early stops drop from 8.5% to 3.8%.
+
+## Models
+
+| Model | Size | Best for | General decision | Browser step |
+|---|---|---|---|---|
+| [**wev-4b**](https://huggingface.co/alanhuangya/wev-4b) | 8.1 GB | the default: one consumer GPU, best on live websites | 15 ms | 217 ms |
+| [wev-8b](https://huggingface.co/alanhuangya/wev-8b) | 15.2 GB | the most accurate out of domain | 21 ms | 322 ms |
+| [wev-1.7b](https://huggingface.co/alanhuangya/wev-1.7b) | 3.5 GB | laptops and small GPUs; the fastest | 10 ms | 91 ms |
+
+*Median latency on one RTX 5090 (bf16), one request at a time.*
 
 ## Quickstart
 
@@ -40,30 +71,29 @@ out["answers"]
 #  'fraud_risk': {'type': 'noul', 'noul': 0.02}}
 ```
 
-Serve it over HTTP, with the same request and response shapes as a System One API:
+**Serve it over HTTP** with the same request and response shapes as a System One API:
 
 ```bash
 wev serve --model alanhuangya/wev-4b --port 8009
 curl -s localhost:8009/v1/systemone -H 'content-type: application/json' -d '{"state": "...", "questions": {...}}'
 ```
 
-A browser agent written for a System One API, such as
+**Use it in a browser agent.** An agent written for a System One API, such as
 [jev-ultrafast](https://github.com/browser-use/jev-ultrafast), can call `http://127.0.0.1:8009/v1/systemone`
 instead of the hosted endpoint. jev-ultrafast hard-codes that URL in `jev_ultrafast/model.py` (`SYSTEM_ONE_URL`), so
 change that one line.
 
 ## Results
 
-Every other model was run on the same requests as `wev` and scored the same way: per-question accuracy, with each
-model's top option taken as its answer. Test splits were held out from all training and model selection, with one
-exception: wev-4b and wev-8b each had two candidates (with and without the second teacher collection), and both were
-read on test. wev-4b's choice rests on development and end-to-end results; wev-8b's was made after both test reads. Raw results are in
-[`results/`](results); `scripts/compare.py` runs any System One server or Laya against a split.
+<p align="center"><img src="assets/teaser.png" width="52%" alt="Browser step success against out-of-domain general accuracy for wev, Kev and Laya."></p>
+
+Every model below receives the same requests and is scored the same way: per-question accuracy, with each model's
+most probable option taken as its answer. All numbers are on held-out test splits.
 
 **General typed decisions**
 
-| model | kev decision-v7 | kev transfer-v4 | typed-decisions |
-|---|---|---|---|
+| Model | Kev decision-v7 | Kev transfer-v4 | typed-decisions |
+|---|:---:|:---:|:---:|
 | **wev-8b** | 82.4 | 77.2 | 79.1 |
 | **wev-4b** | 80.6 | 73.8 | 79.4 |
 | **wev-1.7b** | 81.1 | 65.5 | **79.5** |
@@ -72,18 +102,11 @@ read on test. wev-4b's choice rests on development and end-to-end results; wev-8
 | Laya (typed-decisions) | 65.7 | 62.8 | 76.8 |
 | Laya | 64.3 | 63.7 | 36.2 |
 
-- *kev decision-v7* is [Kev](https://github.com/jaredpalmer/kev)'s own training suite. `wev` trains on its train
-  split too, but it shares its capacity with browser data, and Kev leads here by 6–8 points.
-- *kev transfer-v4* is out-of-domain for every model in the table. wev-8b is level with Kev-8B there, and Kev-4B leads.
-- *[typed-decisions](https://huggingface.co/datasets/LocalLLaMA/typed-decisions)* covers four agent and ops workflows
-  with five questions per case. `wev` trains on 80% of its train split, as the Laya (typed-decisions) specialist does.
-  Kev and plain Laya do not, so they are generalists on this column.
+**Browser steps.** Mind2Web test split: 873 requests on websites unseen in training. A step counts when both the
+operation and the target element are right.
 
-**Browser steps.** These are single steps from the Mind2Web test split: 873 requests on websites unseen in training,
-in jev-ultrafast's request format. A step succeeds when both the operation and the target element are right.
-
-| model | step success | operation |
-|---|---|---|
+| Model | Step success | Operation |
+|---|:---:|:---:|
 | **wev-4b** | **75.9** | **91.2** |
 | **wev-8b** | 75.5 | 90.3 |
 | **wev-1.7b** | 68.2 | 88.1 |
@@ -92,37 +115,56 @@ in jev-ultrafast's request format. A step succeeds when both the operation and t
 | Laya (typed-decisions) | 0.7 | 13.1 |
 | Laya | 0.0 | 2.5 |
 
-`wev` is evaluated with a 4096-token state, and 11 of the requests exceed it. Those 11 count as wrong for `wev`. Kev
-and Laya were run as published, without web training data, and their context budgets cut most of a page.
+**End to end on live websites.** jev-ultrafast ran 153 held-out tasks with each model as its System One. A task
+succeeds when the agent says DONE and an LLM judge, reading the final page, agrees.
 
-**End to end on live websites.** jev-ultrafast ran 153 held-out tasks with each model as its System One. A task counts
-as a success when the agent says DONE and an LLM judge, reading the final page, agrees.
+| System One | Tasks completed |
+|---|:---:|
+| wev-4b | 30 / 153 |
+| wev-8b | 28 / 153 |
+| qwen3-max, prompted (the teacher) | 27 / 153 |
 
-| System One | tasks completed |
-|---|---|
-| wev-4b | 30 / 153 (19.6%) |
-| wev-8b | 28 / 153 (18.3%) |
-| qwen3-max, prompted (the teacher) | 27 / 153 (17.6%) |
+<details>
+<summary><b>Notes on the comparison</b></summary>
 
-The local students are on par with their teacher; the differences between the three rows are within run-to-run
-noise. Live sites differ from run to run: two runs of wev-8b variants with the same score disagreed on 8 tasks each
-way, so treat gaps of a few tasks as noise. wev-4b's gain over its previous version (30 vs 21) held on a paired
-comparison: 10 tasks gained and 1 lost. Google Flights often answers automated
-browsing with a CAPTCHA, and every model fails most of those tasks.
+- *Kev decision-v7* is Kev's own training suite; wev also trains on its train split, and Kev leads there by 6–8
+  points. *Kev transfer-v4* is out of domain for every model in the table.
+- wev and Laya (typed-decisions) train on 80% of the typed-decisions train split; Kev and plain Laya do not, so on
+  that column they are generalists.
+- Kev and Laya ran as published, without web training data. wev is evaluated with a 4,096-token state; the 11
+  Mind2Web requests beyond it count as wrong for wev.
+- Live sites change from run to run, so treat end-to-end gaps of a few tasks as noise. wev-4b's gain from its second
+  teacher collection held on a paired comparison (10 tasks gained, 1 lost).
+- Test splits were held out from training and model selection, with one exception: wev-4b and wev-8b each had two
+  candidates, and both were read on test.
+- Raw results are in [`results/`](results).
 
-**Speed.** These are median in-process latencies on one RTX 5090 in bf16, with a warm model, one request at a time.
-Every question in a request is answered in the same pass.
+</details>
 
-| model | kev decision-v7 (~180 tokens, 1 question) | typed-decisions (~380 tokens, 5 questions) | browser step (~3,200 tokens, 2 questions) |
-|---|---|---|---|
-| wev-1.7b | 10 ms | 13 ms | 91 ms |
-| wev-4b | 15 ms | 25 ms | 217 ms |
-| wev-8b | 21 ms | 37 ms | 322 ms |
+<details>
+<summary><b>Calibration: choosing when to stop</b></summary>
 
-On a laptop (Apple M5, PyTorch MPS backend, fp32), wev-1.7b loads in about 30 s and answers a one-question decision in
-77 ms. Reproduce with `scripts/bench_latency.py --model <export> --data <jsonl>...`.
+<p align="center"><img src="assets/stopping.png" width="55%" alt="DONE recall against premature DONE rate as the threshold on the DONE probability is swept."></p>
+
+The hardest browser decision is when to stop. Accepting DONE only above a probability threshold trades missed stops
+for early ones: at 0.8, wev-4b stops early on 3.8% of unfinished steps (8.5% at 0.5), and wev-8b on 1.7%.
+
+</details>
 
 ## How it works
+
+**Interface distillation.** An agent talks to its System One through typed requests. We serve a prompted LLM behind
+that interface while the agent works on live websites, so every logged request and answer is already a training
+example in the decision model's own format. An LLM judge reads each episode's final page and keeps only the episodes
+whose outcome it confirms. It rejected 36% of the teacher's own DONE claims.
+
+**Data.** We combine those episodes with Mind2Web and NNetNav steps converted to the same request format, and with
+general typed-decision corpora. An LLM-judge audit of NNetNav's stopping labels overturned 31% of its DONE labels.
+
+**Model.** A Qwen3 base model with its vocabulary head removed, adapted with LoRA and merged into the released
+weights. Each question sees the state and itself only, so one forward pass answers every question in a request, and
+question order never changes an answer. A pointer head scores each option against the question and normalises the
+scores into probabilities.
 
 ```
 <state> page text · elements · recent actions
@@ -130,38 +172,12 @@ On a laptop (Apple M5, PyTorch MPS backend, fp32), wev-1.7b loads in about 30 s 
 <q> which element to CLICK? <opt> [1] Search </opt> <opt> [2] Sign in </opt> … <decide>
 ```
 
-- **Backbone.** A Qwen3 base model with its vocabulary head removed, so it cannot generate text. It is adapted with
-  LoRA (r=16, every attention and MLP projection), and the adapter is merged into the released weights.
-- **Mask.** Each question sees the state and itself, never another question, and each question's positions restart
-  after the state. One pass answers every question in a request, and question order never changes an answer (tested).
-- **Readout.** A pointer head scores each option's `</opt>` hidden state against the question's `<decide>` state and
-  normalises the scores into probabilities.
-- **Options in the code, not in the release.** `--head set` adds a small permutation-equivariant transformer over the
-  option set, and `--keep_layers N` truncates the backbone. On 1.7B, keeping 18 of 28 layers ran 23% faster and cost
-  about 3 points of accuracy. The set head did not help at full depth, so the released models use the pointer head
-  and every layer.
-
-The packing, mask, pointer head and request rendering are adapted from [kev](https://github.com/jaredpalmer/kev)
-(Apache-2.0). See [NOTICE](NOTICE).
-
-## Training data
-
-| source | license | what it adds |
-|---|---|---|
-| [Mind2Web](https://huggingface.co/datasets/osunlp/Mind2Web) | CC BY 4.0 | human browser steps (click, type, select), split by website |
-| [NNetNav-live](https://huggingface.co/datasets/stanfordnlp/nnetnav-live) | Apache-2.0 | live-web steps; DONE relabelled by an LLM judge (about a third of the original DONE labels were wrong) |
-| teacher episodes | outputs of qwen3-max | jev-ultrafast on live sites with qwen3-max as System One; only judge-verified successes are kept |
-| [kev decision-v7](https://github.com/jaredpalmer/kev) | per source | ten public classification and QA sources plus rule-composition records |
-| [typed-decisions](https://huggingface.co/datasets/LocalLLaMA/typed-decisions) | Apache-2.0 | agent and ops workflows (80% of its train split) |
-| [tasksource-jev](https://huggingface.co/datasets/tasksource/tasksource-jev) | mixed, per source task (some research-only) | hundreds of classification tasks recast as decisions |
-| [jev-distill-corpus-v3](https://huggingface.co/datasets/SargeDev/jev-distill-corpus-v3) | Apache-2.0 | synthetic operational scenarios with soft labels |
-| [typed-decisions-synth](https://huggingface.co/datasets/n4ze3m/typed-decisions-synth) | MIT | multi-question cases over 149 domains |
-
-**Use terms.** The weights are released under Apache-2.0, but some training data carries its own terms: several
-tasksource-jev source tasks are licensed for research only, and the teacher episodes are outputs of qwen3-max, subject
-to its provider's terms. Treat the models as research artifacts, and check those terms before any commercial use.
+The [paper](paper/icml/main.pdf) has the full method, ablations and failure analysis.
 
 ## Train your own
+
+<details>
+<summary><b>Data, training, evaluation and export commands</b></summary>
 
 ```bash
 pip install -e ".[train,serve,dev]"
@@ -176,8 +192,7 @@ python scripts/judge_done.py --data data/nnetnav-v2/train.jsonl --out judge-trai
 python scripts/apply_judge.py --data data/nnetnav-v2 --judge 'judge-{split}.jsonl' --out data/nnetnav-v3-clean
 
 # the wev-4b recipe; dir:K repeats a training file K times. One GPU works too: drop torchrun.
-# wev-8b and wev-1.7b use the same mix without data/teacher-v2 (the second teacher collection). On 8B it left
-# live-web success unchanged and cost about 2 points on kev transfer-v4, so wev-8b keeps the earlier mix.
+# wev-8b and wev-1.7b use the same mix without data/teacher-v2.
 torchrun --nproc_per_node 8 -m wev.train --base Qwen/Qwen3-4B-Base --head pointer --lr 1e-4 --epochs 1 \
   --batch_tokens 6000 --accum 1 --checkpointing 0 --out runs/wev-4b \
   --data data/m2w-v2,data/nnetnav-v3-clean,data/teacher-v1:3,data/teacher-v2:3,data/general/kev-v7:2,data/general/typed-decisions-train:8,data/ext/tasksource-jev,data/ext/jev-distill,data/ext/td-synth
@@ -187,19 +202,43 @@ wev export --run runs/wev-4b --out exports/wev-4b --check data/general/typed-dec
 pytest -q tests
 ```
 
-To collect teacher episodes, use `scripts/teacher_server.py`, `make_tasks.py`, `collect.py` and
-`build_teacher_data.py`: an LLM serves as a System One server behind jev-ultrafast on live sites.
+The converted browser data and both teacher collections are on the Hub as
+[`alanhuangya/wev-data`](https://huggingface.co/datasets/alanhuangya/wev-data); `validation.jsonl` is read as the
+development split. To collect new teacher episodes, use `scripts/teacher_server.py`, `make_tasks.py`, `collect.py`
+and `build_teacher_data.py`.
+
+</details>
+
+<details>
+<summary><b>Training data and licenses</b></summary>
+
+| Source | License | What it adds |
+|---|---|---|
+| [Mind2Web](https://huggingface.co/datasets/osunlp/Mind2Web) | CC BY 4.0 | human browser steps (click, type, select), split by website |
+| [NNetNav-live](https://huggingface.co/datasets/stanfordnlp/nnetnav-live) | Apache-2.0 | live-web steps; DONE relabelled by an LLM judge |
+| teacher episodes | outputs of qwen3-max | jev-ultrafast on live sites with qwen3-max as System One; judge-verified |
+| [Kev decision-v7](https://github.com/jaredpalmer/kev) | per source | ten public classification and QA sources plus rule-composition records |
+| [typed-decisions](https://huggingface.co/datasets/LocalLLaMA/typed-decisions) | Apache-2.0 | agent and ops workflows (80% of its train split) |
+| [tasksource-jev](https://huggingface.co/datasets/tasksource/tasksource-jev) | mixed, per source task | hundreds of classification tasks recast as decisions |
+| [jev-distill-corpus-v3](https://huggingface.co/datasets/SargeDev/jev-distill-corpus-v3) | Apache-2.0 | synthetic operational scenarios with soft labels |
+| [typed-decisions-synth](https://huggingface.co/datasets/n4ze3m/typed-decisions-synth) | MIT | multi-question cases over 149 domains |
+
+**Use terms.** The weights are released under Apache-2.0, but some training data carries its own terms: several
+tasksource-jev source tasks are licensed for research only, and the teacher episodes are outputs of qwen3-max,
+subject to its provider's terms. Treat the models as research artifacts and check those terms before commercial use.
+
+</details>
 
 ## Limitations
 
-- English only. `wev` makes decisions and does not write text; in jev-ultrafast, typed values come from its separate
+- English only. wev makes decisions and does not write text; in jev-ultrafast, typed values come from its separate
   text model.
-- Browser targets are scored among the candidates the agent lists (8–40 per step), not against every element on the
-  page. These numbers are not comparable to the Mind2Web leaderboard.
-- DONE and BLOCKED are the hardest browser operations. On NNetNav's test split, wev-4b says DONE too early on 8% of
-  steps. If an early stop is costly, act on DONE only above a probability threshold.
+- Browser targets are scored among the candidates the agent lists (8–40 per step), not every element on the page, so
+  the numbers are not comparable to the Mind2Web leaderboard.
+- Rare operations are rarely predicted: BLOCKED and scrolling have low recall. On NNetNav, wev-4b says DONE too early
+  on 8–10% of steps unless you threshold it.
 - On Kev's own suite, Kev is more accurate.
-- `wev` has not been compared with Jev itself, because we have no API access.
+- wev has not been compared with Jev itself, because we have no API access.
 
 ## Citation
 
@@ -214,7 +253,9 @@ Jun Huang and Xin Ren contributed equally (University of Electronic Science and 
 }
 ```
 
-## License
+## Acknowledgements and license
 
-Apache-2.0. The repository includes code adapted from kev (Apache-2.0) and instruction text from jev-ultrafast (MIT).
-The models build on Qwen3 base models (Apache-2.0) and use the datasets listed above. See [NOTICE](NOTICE).
+Apache-2.0. The model code builds on [kev](https://github.com/jaredpalmer/kev) (Apache-2.0) and uses instruction text
+from [jev-ultrafast](https://github.com/browser-use/jev-ultrafast) (MIT); the models build on Qwen3 base models
+(Apache-2.0). wev is an independent project, not affiliated with TypeSafe AI, and does not use Jev. See
+[NOTICE](NOTICE).
