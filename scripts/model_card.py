@@ -189,6 +189,19 @@ check those terms before any commercial use.
 - DONE and BLOCKED are the hardest operations; gate DONE on its probability when early stops are costly.
 - Not compared with Jev itself (no API access).
 
+## Citation
+
+Jun Huang and Xin Ren contributed equally (University of Electronic Science and Technology of China).
+
+```bibtex
+@misc{{huang2026wev,
+  title  = {{wev: Distilling LLM Browser Agents into Open, Local System-One Decision Models}},
+  author = {{Huang, Jun and Ren, Xin}},
+  year   = {{2026}},
+  url    = {{https://github.com/alanhuangyoo/wev}}
+}}
+```
+
 ## License
 
 Apache-2.0, like the base model. Architecture code adapted from [kev](https://github.com/jaredpalmer/kev) (Apache-2.0).

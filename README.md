@@ -201,6 +201,19 @@ To collect teacher episodes, use `scripts/teacher_server.py`, `make_tasks.py`, `
 - On Kev's own suite, Kev is more accurate.
 - `wev` has not been compared with Jev itself, because we have no API access.
 
+## Citation
+
+Jun Huang and Xin Ren contributed equally (University of Electronic Science and Technology of China).
+
+```bibtex
+@misc{huang2026wev,
+  title  = {wev: Distilling LLM Browser Agents into Open, Local System-One Decision Models},
+  author = {Huang, Jun and Ren, Xin},
+  year   = {2026},
+  url    = {https://github.com/alanhuangyoo/wev}
+}
+```
+
 ## License
 
 Apache-2.0. The repository includes code adapted from kev (Apache-2.0) and instruction text from jev-ultrafast (MIT).
