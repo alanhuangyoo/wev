@@ -39,6 +39,8 @@ configs:
 
 # wev data
 
+**Jun Huang\*, Xin Ren\*** · University of Electronic Science and Technology of China · \*Equal contribution
+
 This dataset holds the browser-step data behind the [wev](https://github.com/alanhuangyoo/wev) decision models:
 [wev-1.7b](https://huggingface.co/alanhuangya/wev-1.7b), [wev-4b](https://huggingface.co/alanhuangya/wev-4b) and
 [wev-8b](https://huggingface.co/alanhuangya/wev-8b). Every row is one browser step, written as a

@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>wev: Local System-One Decision Models</title>
+<meta name="description" content="wev distils LLM browser agents into open, local System-One decision models: typed questions in, calibrated probabilities out, in one forward pass.">
+<style>
+  :root {
+    --bg: #ffffff; --bg-soft: #f6f7f9; --ink: #16181d; --ink-2: #4a4f5a; --ink-3: #6b7280;
+    --line: #e4e6eb; --accent: #2a78d6; --accent-ink: #ffffff; --code: #f1f3f6; --good: #1f8a4c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #111317; --bg-soft: #181b21; --ink: #eceef2; --ink-2: #b8bcc6; --ink-3: #8b90a0;
+            --line: #2a2e37; --accent: #5598e7; --accent-ink: #0b0d10; --code: #1c2027; --good: #4cc27d; }
+    .fig { background: #ffffff; border-radius: 10px; }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); }
+  body { font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, Arial, sans-serif; }
+  main { max-width: 920px; margin: 0 auto; padding: 56px 20px 72px; }
+  h1 { font-size: clamp(30px, 5vw, 44px); line-height: 1.15; margin: 0 0 14px; letter-spacing: -0.02em; text-align: center; }
+  h1 .name { color: var(--accent); }
+  h2 { font-size: 22px; margin: 48px 0 14px; letter-spacing: -0.01em; }
+  p { margin: 0 0 14px; color: var(--ink-2); }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .authors { text-align: center; font-size: 18px; margin: 18px 0 4px; color: var(--ink); }
+  .authors a { color: var(--ink); font-weight: 600; }
+  .aff { text-align: center; color: var(--ink-3); font-size: 15px; margin: 0; }
+  .buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 26px 0 8px; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 999px;
+         background: var(--ink); color: var(--bg); font-weight: 600; font-size: 15px; }
+  .btn:hover { text-decoration: none; opacity: .88; }
+  .btn.alt { background: var(--bg-soft); color: var(--ink); border: 1px solid var(--line); }
+  .tagline { text-align: center; font-size: 19px; color: var(--ink-2); max-width: 720px; margin: 22px auto 0; }
+  .fig { margin: 30px 0 8px; }
+  .fig img { width: 100%; display: block; border-radius: 10px; border: 1px solid var(--line); }
+  .caption { font-size: 14px; color: var(--ink-3); text-align: center; margin-top: 8px; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin: 26px 0 6px; }
+  .stat { background: var(--bg-soft); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; }
+  .stat .v { font-size: 30px; font-weight: 700; letter-spacing: -0.02em; }
+  .stat .l { font-size: 14px; color: var(--ink-3); line-height: 1.4; margin-top: 2px; }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; margin: 8px 0 6px; }
+  th, td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: center; }
+  th:first-child, td:first-child { text-align: left; }
+  th { color: var(--ink-3); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; }
+  tr.ours td { font-weight: 600; }
+  .best { color: var(--good); font-weight: 700; }
+  .note { font-size: 13.5px; color: var(--ink-3); }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; align-items: start; }
+  @media (max-width: 720px) { .two { grid-template-columns: 1fr; } main { padding-top: 36px; } }
+  pre { background: var(--code); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px;
+        overflow-x: auto; font: 13.5px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: var(--ink); margin: 0; }
+  .copy-wrap { position: relative; }
+  .copy { position: absolute; top: 8px; right: 8px; padding: 4px 10px; font-size: 12px; border-radius: 6px;
+          border: 1px solid var(--line); background: var(--bg); color: var(--ink-2); cursor: pointer; }
+  ul { color: var(--ink-2); padding-left: 22px; margin: 0 0 14px; }
+  li { margin: 4px 0; }
+  footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 13.5px; color: var(--ink-3); text-align: center; }
+</style>
+</head>
+<body>
+<main>
+
+  <h1><span class="name">wev</span>: Distilling LLM Browser Agents into<br>Open, Local System-One Decision Models</h1>
+
+  <div class="authors">Jun Huang<sup>*</sup> &nbsp;·&nbsp; Xin Ren<sup>*</sup></div>
+  <p class="aff">University of Electronic Science and Technology of China &nbsp;·&nbsp; <sup>*</sup>Equal contribution</p>
+
+  <div class="buttons">
+    <a class="btn" href="https://zenodo.org/records/22941164">📄 Paper</a>
+    <a class="btn" href="https://github.com/alanhuangyoo/wev">💻 Code</a>
+    <a class="btn" href="https://huggingface.co/collections/alanhuangya/wev-6ab4eb5d872c9ae9fd68faa6">🤗 Models</a>
+    <a class="btn" href="https://huggingface.co/datasets/alanhuangya/wev-data">🗂️ Dataset</a>
+    <a class="btn alt" href="https://pypi.org/project/wev-ai/">pip install wev-ai</a>
+  </div>
+
+  <p class="tagline">A local decision model for agents: typed questions in, calibrated probabilities out, in one forward
+  pass. No text generation, no API key.</p>
+
+  <div class="fig"><img src="overview.png" alt="Interface distillation overview"></div>
+  <p class="caption">Interface distillation: a teacher LLM answers a browser agent's typed requests on live websites, an
+  LLM judge keeps the verified episodes, and the wev student serves the same interface locally.</p>
+
+  <div class="stats">
+    <div class="stat"><div class="v">76%</div><div class="l">browser steps right on unseen websites (next best open model: 21%)</div></div>
+    <div class="stat"><div class="v">30 / 153</div><div class="l">live-website tasks completed, on par with the qwen3-max teacher (27)</div></div>
+    <div class="stat"><div class="v">10–320 ms</div><div class="l">per decision on one RTX 5090; 77 ms on a laptop</div></div>
+    <div class="stat"><div class="v">36%</div><div class="l">of the teacher's own DONE claims rejected by the judge</div></div>
+  </div>
+
+  <h2>Abstract</h2>
+  <p>System-One decision models answer typed questions about a free-form state with a probability for every declared
+  option, in one forward pass and without generating text, but the open models of this kind are trained on general
+  decision data and reach at most 21% step success on browser steps from unseen websites. We observe that the typed
+  interface between a browser agent and its System One is itself a source of supervision: a prompted LLM placed behind
+  it while the agent works on live websites produces training data in exactly the decision model's format, and an LLM
+  judge reading each episode's final page decides which episodes to keep. We combine this interface distillation with
+  Mind2Web and NNetNav demonstrations converted to the same format, after auditing NNetNav's stopping labels, and with
+  general decision corpora. The resulting open models, wev-1.7b, wev-4b and wev-8b, build on Qwen3 base models. wev-4b
+  answers 76% of browser steps on unseen websites correctly and stays competitive on general decision benchmarks. As
+  the System One of an open browser agent, it completes as many held-out live-website tasks as its LLM teacher, at
+  15–320 ms per decision on one consumer GPU.</p>
+
+  <h2>Results</h2>
+  <div class="two">
+    <div>
+      <div class="fig"><img src="teaser.png" alt="Browser step success against out-of-domain general accuracy"></div>
+      <p class="caption">Only wev is strong on both browser steps and general decisions.</p>
+    </div>
+    <div>
+      <table>
+        <tr><th>Model</th><th>Browser step</th><th>Transfer</th><th>Typed-dec.</th></tr>
+        <tr class="ours"><td>wev-4b</td><td class="best">75.9</td><td>73.8</td><td>79.4</td></tr>
+        <tr class="ours"><td>wev-8b</td><td>75.5</td><td>77.2</td><td>79.1</td></tr>
+        <tr class="ours"><td>wev-1.7b</td><td>68.2</td><td>65.5</td><td class="best">79.5</td></tr>
+        <tr><td>Kev-4B</td><td>21.2</td><td class="best">82.1</td><td>65.1</td></tr>
+        <tr><td>Kev-8B</td><td>19.0</td><td>76.8</td><td>62.7</td></tr>
+        <tr><td>Laya (typed-dec.)</td><td>0.7</td><td>62.8</td><td>76.8</td></tr>
+        <tr><td>Laya</td><td>0.0</td><td>63.7</td><td>36.2</td></tr>
+      </table>
+      <p class="note">Test splits, same scorer for every model. Browser step: Mind2Web step success on unseen websites.
+      Transfer: Kev transfer-v4, out of domain for all models. Typed-dec.: typed-decisions, on which wev and Laya
+      (typed-dec.) train.</p>
+    </div>
+  </div>
+
+  <h2>Models</h2>
+  <table>
+    <tr><th>Model</th><th>Size</th><th>Best for</th><th>General decision</th><th>Browser step</th></tr>
+    <tr class="ours"><td><a href="https://huggingface.co/alanhuangya/wev-4b">wev-4b</a></td><td>8.1 GB</td><td>default; best on live websites</td><td>15 ms</td><td>217 ms</td></tr>
+    <tr class="ours"><td><a href="https://huggingface.co/alanhuangya/wev-8b">wev-8b</a></td><td>15.2 GB</td><td>most accurate out of domain</td><td>21 ms</td><td>322 ms</td></tr>
+    <tr class="ours"><td><a href="https://huggingface.co/alanhuangya/wev-1.7b">wev-1.7b</a></td><td>3.5 GB</td><td>laptops; the fastest</td><td>10 ms</td><td>91 ms</td></tr>
+  </table>
+  <p class="note">Median latency on one RTX 5090 (bf16), one request at a time.</p>
+
+  <h2>Quickstart</h2>
+  <div class="copy-wrap"><button class="copy" data-target="qs">Copy</button><pre id="qs">pip install "wev-ai[serve]"
+
+import wev
+m = wev.load("alanhuangya/wev-4b")
+out = m.predict(
+    state="Refund request: order #4411 arrived damaged, customer attached photos.",
+    questions={"action": {"type": "choice", "instructions": "What should support do?",
+                          "criteria": {"refund": "Refund the order.", "replace": "Ship a replacement.",
+                                       "escalate": "Send to a human agent."}}},
+)
+
+# or serve a drop-in POST /v1/systemone endpoint
+wev serve --model alanhuangya/wev-4b --port 8009</pre></div>
+
+  <h2>Citation</h2>
+  <div class="copy-wrap"><button class="copy" data-target="bib">Copy</button><pre id="bib">@misc{huang2026wev,
+  title     = {wev: Distilling LLM Browser Agents into Open, Local System-One Decision Models},
+  author    = {Huang, Jun and Ren, Xin},
+  year      = {2026},
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.22941164},
+  url       = {https://doi.org/10.5281/zenodo.22941164}
+}</pre></div>
+
+  <footer>
+    wev is an independent project, not affiliated with TypeSafe AI. Code under Apache-2.0; see the
+    <a href="https://github.com/alanhuangyoo/wev">repository</a> for licenses and acknowledgements.
+  </footer>
+</main>
+<script>
+  document.querySelectorAll(".copy").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var t = document.getElementById(b.dataset.target).innerText;
+      try { navigator.clipboard.writeText(t).then(function () { b.textContent = "Copied"; setTimeout(function () { b.textContent = "Copy"; }, 1500); }); }
+      catch (e) { b.textContent = "Select and copy"; }
+    });
+  });
+</script>
+</body>
+</html>

@@ -8,6 +8,7 @@ Typed questions in, calibrated probabilities out, in one forward pass. No text g
 [![Models](https://img.shields.io/badge/%F0%9F%A4%97%20Models-1.7B%20%7C%204B%20%7C%208B-ffcc4d)](https://huggingface.co/collections/alanhuangya/wev-6ab4eb5d872c9ae9fd68faa6)
 [![Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Dataset-wev--data-ffcc4d)](https://huggingface.co/datasets/alanhuangya/wev-data)
 [![pip](https://img.shields.io/badge/pip%20install-wev--ai-3775a9?logo=pypi&logoColor=white)](https://pypi.org/project/wev-ai/)
+[![Project page](https://img.shields.io/badge/%F0%9F%A4%97%20Project-page-ffcc4d)](https://huggingface.co/spaces/alanhuangya/wev)
 [![Paper](https://img.shields.io/badge/Paper-Zenodo-b31b1b)](https://zenodo.org/records/22941164)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22941164.svg)](https://zenodo.org/records/22941164)
 [![License](https://img.shields.io/badge/License-Apache--2.0-2ea44f)](https://github.com/alanhuangyoo/wev/blob/main/LICENSE)

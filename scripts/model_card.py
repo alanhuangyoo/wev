@@ -86,6 +86,8 @@ datasets:
 
 # {name}
 
+**Jun Huang\\*, Xin Ren\\*** · University of Electronic Science and Technology of China · \\*Equal contribution
+
 **A local decision model: typed questions in, calibrated probabilities out, in one forward pass.** `{name}` answers
 the `POST /v1/systemone` request shape (choice, yes/no and score questions over a free-form state), for general
 decisions and for browser-agent steps (*which operation? which element?*). It runs on your own GPU: no API key,
