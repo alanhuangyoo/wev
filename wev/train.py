@@ -18,7 +18,7 @@ import torch.distributed as dist
 import torch.nn.functional as F
 from transformers import AutoTokenizer
 
-from .data import load_items
+from .data import load_items, split_file
 from .evaluate import evaluate_items
 from .model import MAX_BRANCH, MAX_STATE, DecisionModel
 
@@ -82,7 +82,7 @@ def main():
         items, n_drop = load_items(tok, d / "train.jsonl", a.max_state, a.max_branch, a.max_tokens, a.limit or None)
         train += items * weight
         dropped += n_drop
-        devs[d.name], _ = load_items(tok, d / "dev.jsonl", a.max_state, a.max_branch, a.max_tokens, a.eval_n)
+        devs[d.name], _ = load_items(tok, split_file(d, "dev"), a.max_state, a.max_branch, a.max_tokens, a.eval_n)
         log(f"{d.name}: train {len(items)} x{weight} (dropped {n_drop}), dev {len(devs[d.name])}", flush=True)
     if a.subsample and a.subsample < len(train):
         train = random.Random(a.seed).sample(train, a.subsample)

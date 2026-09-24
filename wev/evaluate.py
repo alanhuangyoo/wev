@@ -85,15 +85,15 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--run", "--model", dest="run", required=True, help="exported model dir, Hub repo, or run dir")
     ap.add_argument("--data", required=True, help="directory with {train,dev,test}.jsonl")
-    ap.add_argument("--split", default="dev", choices=["train", "dev", "test"])
+    ap.add_argument("--split", default="dev", choices=["train", "dev", "validation", "test"])
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--dtype", choices=["bf16", "fp32"], default="bf16")
     ap.add_argument("--out", help="write metrics JSON here")
     a = ap.parse_args()
-    from .data import load_items
+    from .data import load_items, split_file
     from .inference import load
     m = load(a.run, dtype=torch.bfloat16 if a.dtype == "bf16" else torch.float32)
-    items, dropped = load_items(m.tokenizer, Path(a.data) / f"{a.split}.jsonl", m.max_state, m.max_branch,
+    items, dropped = load_items(m.tokenizer, split_file(a.data, a.split), m.max_state, m.max_branch,
                                 limit=a.limit or None)
     metrics = {"run": a.run, "split": a.split, "dropped": dropped, **evaluate_items(m.model, items)}
     print(json.dumps(metrics, indent=2))

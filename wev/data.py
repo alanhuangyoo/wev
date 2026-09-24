@@ -75,3 +75,13 @@ def load_items(tok, path, max_state, max_branch, max_tokens=None, limit=None):
         if limit and len(items) >= limit:
             break
     return items, dropped
+
+
+def split_file(directory, split: str) -> Path:
+    """A split's file; "dev" and "validation" name the same split (Hugging Face datasets use "validation")."""
+    directory = Path(directory)
+    names = [split] + {"dev": ["validation"], "validation": ["dev"]}.get(split, [])
+    for name in names:
+        if (directory / f"{name}.jsonl").exists():
+            return directory / f"{name}.jsonl"
+    return directory / f"{split}.jsonl"
