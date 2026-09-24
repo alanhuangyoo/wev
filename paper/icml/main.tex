@@ -66,10 +66,9 @@ time, and the model returns a probability for every option in one forward pass, 
 can be malformed. The open agent jev-ultrafast \citep{jevultrafast2026} is built on this interface: at each step it asks
 a hosted System One which operation to perform and which listed element to target.
 
-Open decision models have followed quickly. Kev \citep{kev2026} adapts Qwen base models with LoRA and a pointer head,
-Laya \citep{laya2026} fine-tunes ModernBERT \citep{warner2024modernbert}, and this-that-model \citep{cheng2026thisthat}
-reads a 2B model's answer from a designated position; work on selective control \citep{wu2026reflex} and on read-out
-failure modes \citep{sun2026typesafe} studies how such models behave inside agents. All of these models learn from
+Open decision models have followed quickly \citep{kev2026,laya2026,cheng2026thisthat}, together with work on
+selective control \citep{wu2026reflex} and on read-out failure modes \citep{sun2026typesafe} that studies how such
+models behave inside agents. All of these models learn from
 general decision data, meaning classification, question answering and rule records with short states. A browser step
 is different in kind. Its state is a page of text and a list of 8--40 candidate elements, about 3{,}200 tokens in our
 data, and its answer is grounded in that page rather than in world knowledge or in a rubric. Scored on identical
@@ -85,7 +84,7 @@ example in the student's input and output format, with no translation between ac
 which episodes to trust, and an LLM judge \citep{zheng2023judging} that reads the final page can make that decision.
 We call this procedure \emph{interface distillation}.
 
-We build \wev on this observation. A decision model following Kev's design is trained on three sources: episodes
+We build \wev on this observation. A non-generative decision model is trained on three sources: episodes
 from interface distillation with qwen3-max \citep{yang2025qwen3} as the teacher; Mind2Web and NNetNav steps converted
 to the agent's request format, with NNetNav's stopping labels audited by a judge; and public general decision corpora
 that keep the model a general-purpose System One. Our contributions are:
@@ -101,6 +100,14 @@ general decision benchmarks, match their teacher's task success on 153 held-out 
 15--320\,ms on one consumer GPU (\cref{sec:results}).
 \end{itemize}
 Code, data builders, models and per-request evaluation outputs are public.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/fig_teaser.pdf}
+\caption{Browser steps against general decisions (test splits). Open decision models trained on general data stay
+below 22\% step success on unseen websites; \wev reaches 68--76\% while remaining competitive out of domain.}
+\label{fig:teaser}
+\end{figure}
 
 \begin{figure*}[t]
 \centering
@@ -143,11 +150,10 @@ with converted demonstrations and general decision corpora, and then serves the 
 
 \paragraph{System-One decision models.}
 The hosted Jev model \citep{typesafe2026jev} introduced a model class that returns typed, calibrated answers instead
-of text; its training method is unpublished. Open models share its interface but differ in backbone and data. Kev
-\citep{kev2026} attaches LoRA adapters \citep{hu2022lora} and a pointer head to Qwen base models and trains on ten
-public classification sources plus rule-composition records; Laya \citep{laya2026} fine-tunes a bidirectional encoder
-\citep{devlin2019bert,warner2024modernbert} with a small decision head; this-that-model \citep{cheng2026thisthat} reads
-answers from a designated position of a 2B decoder. REFLEX \citep{wu2026reflex} places a hosted decision model inside an
+of text; its training method is unpublished. Open models share its interface but differ in backbone and data: decoder models adapted with LoRA
+\citep{kev2026,hu2022lora}, bidirectional encoders with a small decision head \citep{laya2026,devlin2019bert,warner2024modernbert},
+and a 2B decoder read at a designated position \citep{cheng2026thisthat}. All of them train on general classification,
+question-answering and rule data. REFLEX \citep{wu2026reflex} places a hosted decision model inside an
 LLM agent and escalates to a strong LLM when confidence is low, and \citet{sun2026typesafe} show that decision heads can
 follow an option's name rather than the rubric bound to it. None of these trains or evaluates a decision model on
 browser steps, and none derives training data from an agent's own decision traffic.
@@ -195,7 +201,7 @@ the reference.
 \subsection{Decision model}
 \label{sec:model}
 
-We follow Kev's design \citep{kev2026} and adapt its code. The state is written once, and each question follows it as
+The backbone and read-out follow an open-source implementation \citep{kev2026}. The state is written once, and each question follows it as
 its own branch, with options delimited by reserved tokens of the Qwen vocabulary:
 \begin{center}\scriptsize
 \begin{tabular}{@{}l@{}}
@@ -509,13 +515,19 @@ Model & transfer-v4 & Mind2Web & NNetNav & Mind2Web & NNetNav \\
 \end{tabular}}
 \end{table}
 
-\input{done_curve.tex}
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/fig_done.pdf}
+\caption{Stopping trade-off on the NNetNav test split (382 DONE steps, 768 others). Each curve accepts DONE only when
+its probability exceeds a threshold swept from 0.05 to 0.99; circles mark 0.5 and squares 0.8.}
+\label{fig:done}
+\end{figure}
 
 An agent acts on the most probable option, but a calibrated probability lets it act more selectively. The expected
 calibration error stays at or below 0.06 on browser steps and at or below 0.10 on out-of-domain decisions
 (\cref{tab:calib}). The most consequential browser decision is when to stop: stopping early ends a task unfinished,
 and stopping late wastes the budget. \Cref{fig:done} shows the trade-off obtained by accepting DONE only above a
-threshold on its probability. \DONECURVETEXT
+threshold on its probability. At a threshold of 0.5, \wev-4b recalls 82\% of DONE steps and stops early on 8.5\% of the others; at 0.8 the premature rate falls to 3.8\% while recall falls to 67\%. \wev-8b reaches 1.7\% premature stops at 66\% recall, or 2.9\% at 73\% with a threshold of 0.7. The curves are smooth, so a deployment can choose its operating point from development data rather than accept the most probable operation, which answers DONE whenever it outranks the other seven operations and so behaves like a threshold below 0.5.
 
 \subsection{What helped and what did not}
 \label{sec:ablation}
