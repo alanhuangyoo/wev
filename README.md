@@ -54,8 +54,10 @@ change that one line.
 
 ## Results
 
-These numbers come from one read of each locked test split. Every other model was run on the same requests and scored
-the same way: per-question accuracy, with each model's top option taken as its answer. Raw results are in
+Every other model was run on the same requests as `wev` and scored the same way: per-question accuracy, with each
+model's top option taken as its answer. Test splits were held out from all training and model selection, with one
+exception: wev-4b and wev-8b each had two candidates (with and without the second teacher collection), and both were
+read on test. wev-4b's choice rests on development and end-to-end results; wev-8b's was made after both test reads. Raw results are in
 [`results/`](results); `scripts/compare.py` runs any System One server or Laya against a split.
 
 **General typed decisions**
@@ -98,12 +100,13 @@ as a success when the agent says DONE and an LLM judge, reading the final page, 
 
 | System One | tasks completed |
 |---|---|
-| **wev-4b** | **30 / 153 (19.6%)** |
+| wev-4b | 30 / 153 (19.6%) |
 | wev-8b | 28 / 153 (18.3%) |
 | qwen3-max, prompted (the teacher) | 27 / 153 (17.6%) |
 
-Live sites differ from run to run: two runs of wev-8b variants with the same score disagreed on 8 tasks each way,
-so treat gaps of a few tasks as noise. wev-4b's gain over its previous version (30 vs 21) held on a paired
+The local students are on par with their teacher; the differences between the three rows are within run-to-run
+noise. Live sites differ from run to run: two runs of wev-8b variants with the same score disagreed on 8 tasks each
+way, so treat gaps of a few tasks as noise. wev-4b's gain over its previous version (30 vs 21) held on a paired
 comparison: 10 tasks gained and 1 lost. Google Flights often answers automated
 browsing with a CAPTCHA, and every model fails most of those tasks.
 
@@ -153,8 +156,9 @@ The packing, mask, pointer head and request rendering are adapted from [kev](htt
 | [jev-distill-corpus-v3](https://huggingface.co/datasets/SargeDev/jev-distill-corpus-v3) | Apache-2.0 | synthetic operational scenarios with soft labels |
 | [typed-decisions-synth](https://huggingface.co/datasets/n4ze3m/typed-decisions-synth) | MIT | multi-question cases over 149 domains |
 
-Several sources come with their own terms: research-only tasks in tasksource-jev, and the model-output terms of the
-teacher. Check them before you use the models commercially.
+**Use terms.** The weights are released under Apache-2.0, but some training data carries its own terms: several
+tasksource-jev source tasks are licensed for research only, and the teacher episodes are outputs of qwen3-max, subject
+to its provider's terms. Treat the models as research artifacts, and check those terms before any commercial use.
 
 ## Train your own
 
