@@ -55,8 +55,9 @@ wev serve --model alanhuangya/wev-8b --port 8009   # drop-in POST /v1/systemone,
 
 ## Results
 
-One read of the locked test splits; every other model was run on the same requests and scored the same way
-(per-question accuracy; `scripts/compare.py`).
+Test splits, held out from training; every other model was run on the same requests and scored the same way
+(per-question accuracy; `scripts/compare.py`). For wev-4b and wev-8b, two candidates each were read on test (see the
+repository README).
 
 **General typed decisions**
 
@@ -119,8 +120,9 @@ Recipe and data builders: [alanhuangyoo/wev](https://github.com/alanhuangyoo/wev
 | [jev-distill-corpus-v3](https://huggingface.co/datasets/SargeDev/jev-distill-corpus-v3) | Apache-2.0 | synthetic operational scenarios, soft labels |
 | [typed-decisions-synth](https://huggingface.co/datasets/n4ze3m/typed-decisions-synth) | MIT | multi-question cases over 149 domains |
 
-Some sources carry their own terms (research-only tasks in tasksource-jev, model-output terms of the teacher); check
-them for your use.
+**Use terms.** Some training data carries its own terms: several tasksource-jev source tasks are research-only, and the
+teacher episodes are qwen3-max outputs subject to its provider's terms. Treat this model as a research artifact and
+check those terms before any commercial use.
 
 ## Limitations
 
